@@ -1,5 +1,5 @@
 h1 a {
-        color: #000000;
+        color: #0000ff;
 
     }
 
@@ -28,7 +28,12 @@ h1 a {
     h1, h2, h3, h4 {
         font-fCentury : Gothic', CenturyGothic, AppleGothic, sans-serif cursive;
     }
-
+    .author {
+        color: #aaaaff;
+        float: left;
+        font-size: 14pt;
+        padding-right: 10px;
+    }
     .date {
         float: right;
         color: #828282;

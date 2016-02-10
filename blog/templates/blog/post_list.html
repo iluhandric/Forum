@@ -8,12 +8,19 @@
                 </div>
                 <a href="{% url 'post_detail' pk=post.pk %}"> <span class="glyphicon glyphicon-eye-open"></span></a>
                 {% if user.is_authenticated %}
-
-                    <a href="{% url 'post_remove' pk=post.pk%}"> <span class="glyphicon glyphicon-remove"></span></a>
+                    {% if user == post.author%}
+                        <a href="{% url 'post_remove' pk=post.pk%}"> <span class="glyphicon glyphicon-remove"></span></a>
+                    {% endif %}
                 {% endif %}
                 {% if user.is_authenticated %}
-                    <a href="{% url 'post_edit' pk=post.pk%}"> <span class="glyphicon glyphicon-pencil"></span></a>
+                    {% if user == post.author%}
+                        <a href="{% url 'post_edit' pk=post.pk%}"> <span class="glyphicon glyphicon-pencil"></span></a>
+                    {% endif %}
                 {% endif %}
+
+            <div class="author">
+                    {{ post.author }}
+                </div>
                 <h1>{{ post.title }}</h1>
                 <p style="word-wrap: normal;">{{ post.text|linebreaks }}</p>
             </div>
