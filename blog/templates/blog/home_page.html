@@ -15,7 +15,6 @@
 padding-left: 30%; margin-right: 20%" >
     </span> </a> </p>
 <h1 style="text-align:center; " id="discuss"> <font face ='Yu Gothic Light', size = 30">Discuss</font></h1>
-<!-- Set Div As your requirement -->
 </div>
 
 
@@ -23,171 +22,156 @@ padding-left: 30%; margin-right: 20%" >
 <p style="text-align:center">  <span id="right" class="fa fa-question-circle" style="font-size: 300px; color: black; margin-top: 100px;
 margin-left: 20%; padding-right: 30% ">
     </span></p>
-<h1 style="text-align:center; " id="ask"> <font face ='Yu Gothic Light', size = 30">Ask</font></h1>
+<h1 style="text-align:center;  padding-right: 10%" id="ask"> <font face ='Yu Gothic Light', size = 30">Ask</font></h1>
 </div>
 
 
 <script>
 
-var right = document.getElementById('right');
-var left = document.getElementById('left');
+    var right = document.getElementById('right');
+    var left = document.getElementById('left');
 
-var right_column = document.getElementById('right_column');
-var left_column = document.getElementById('left_column');
+    var right_column = document.getElementById('right_column');
+    var left_column = document.getElementById('left_column');
 
-var discuss = document.getElementById('discuss');
-var ask = document.getElementById('ask');
-var in_center = 1;
-var is_expanded = 0;
-var expanding = 0;
+    var discuss = document.getElementById('discuss');
+    var ask = document.getElementById('ask');
+    var in_center = 1;
+    var is_expanded = 0;
+    var expanding = 0;
 
+    var is_movingf = 0;
+    var is_movinge = 0;
 
-
-function expand(side) {
-  //  while (!in_center){}
-    var elem = document.getElementById(side + "_column");
-    if (side == "left") {
-        var another = document.getElementById("right_column");
-        var decs = document.getElementById("right_black");
-    } else {
-        var another = document.getElementById("left_column");
-        var decs = document.getElementById("left_black");
-    }
-    var prs = 50;
-    var id = setInterval(frame1, 25);
-    left.onmouseover = NULL;
-    left.onmouseout = NULL;
-    right.onmouseover = NULL;
-    right.onmouseout = NULL;
-
-    function frame1() {
-        if  (!in_center){} else {
-        if (prs == 60) {
-            in_center = 0;
-            clearInterval(id);
-            if (side == "right") {
-                right.onmouseout = mouseOutFunction;
-
-
-                //document.body.insertBefore(disc_desc, document.body.secondChild);
-            } else {
-                left.onmouseout = mouseOutFunction;
-               // document.body.appendChild(ask_desc);
-               // document.body.insertBefore(disc_desc, document.body.firstChild);
-            }
-            //decs.style.zIndex = 2;
-            //another.parentNode.removeChild(another);
+    function expand(side) {
+        var elem = document.getElementById(side + "_column");
+        var another;
+        var description;
+        if (side == "left") {
+            another = document.getElementById("right_column");
+            description = document.getElementById("right_black");
         } else {
-            elem.style.zIndex = 2;
-            another.style.zIndex = 0;
-            decs.style.zIndex = 1;
-            prs++;
-            expanding = 1;
-            elem.style.width = prs + '%';
-            decs.style.opacity = (prs - 50)/11;
-            if (side == "left") {
-                another.style.left = prs + '%';
-                another.style.width = 100 - prs + '%';
-            } else {
-                elem.style.left = 100 - prs + '%';
-                another.style.width = 100 - prs + '%';
+            another = document.getElementById("left_column");
+            description = document.getElementById("left_black");
+        }
+        var prs = 50;
+        var id = setInterval(frame1, 25);
+        left.onmouseover = NULL;
+        left.onmouseout = NULL;
+        right.onmouseover = NULL;
+        right.onmouseout = NULL;
+
+        function frame1() {
+            if  (is_movingf){}
+            else {
+                if (prs == 60) {
+                    is_movinge = 0;
+                    in_center = 0;
+                    clearInterval(id);
+                    if (side == "right") {
+                        right.onmouseout = mouseOutFunction;
+                    } else {
+                        left.onmouseout = mouseOutFunction;
+                    }
+                } else {
+                    is_movinge = 1;
+                    elem.style.zIndex = 2;
+                    another.style.zIndex = 0;
+                    description.style.zIndex = 1;
+                    prs++;
+                    elem.style.width = prs + '%';
+                    description.style.opacity = (prs - 50)/11;
+                    if (side == "left") {
+                        another.style.left = prs + '%';
+                        another.style.width = 100 - prs + '%';
+                    } else {
+                        elem.style.left = 100 - prs + '%';
+                        another.style.width = 100 - prs + '%';
+                    }
+                }
             }
-        }}
+        }
     }
-}
-function less(side) {
-    var elem = document.getElementById(side + "_column");
-    if (side == "left") {
-        var another = document.getElementById("right_column");
-        var decs = document.getElementById("right_black");
-    } else {
-        var another = document.getElementById("left_column");
-        var decs = document.getElementById("left_black");
-    }
-
-    var prs = 60;
-  //  print(prs)
-    var id = setInterval(frame, 25);
-    left.onmouseover = NULL;
-    left.onmouseout = NULL;
-    right.onmouseover = NULL;
-    right.onmouseout = NULL;
-    //decs.style.zIndex = 0;
-    function frame() {
-        //is_expanded = 0;
-        if (in_center || is_expanded) {} else {
-        if (prs == 50) {
-            in_center = 1;
-            clearInterval(id);
-            left.onmouseover = mouseOverFunction;
-            right.onmouseover = mouseOverFunction;
-
-            //ask_desc.parentNode.removeChild(ask_desc);
-          //  disc_desc.parentNode.removeChild(disc_desc);
+    function filch(side) {
+        var elem = document.getElementById(side + "_column");
+        var another;
+        var description;
+        if (side == "left") {
+            another = document.getElementById("right_column");
+            description = document.getElementById("right_black");
         } else {
-            //is_expanded = 0;
-            decs.style.zIndex = 0;
-            prs--;
-            elem.style.width = prs + '%';
-            if (side == "left") {
-                another.style.left = prs + '%';
-                another.style.width = 100 - prs + '%';
-            } else {
-                elem.style.left = 100 - prs + '%';
-                another.style.width = 100 - prs + '%';
+            another = document.getElementById("left_column");
+            description = document.getElementById("left_black");
+        }
 
+        var prs = 60;
+        var id = setInterval(frame, 25);
+        left.onmouseover = NULL;
+        left.onmouseout = NULL;
+        right.onmouseover = NULL;
+        right.onmouseout = NULL;
+        function frame() {
+            if (is_movinge) {}
+            else {
+                if (prs == 50) {
+                    in_center = 1;
+                    is_movingf = 0;
+                    clearInterval(id);
+                    left.onmouseover = mouseOverFunction;
+                    right.onmouseover = mouseOverFunction;
+                    description.style.zIndex = 0;
+                } else {
+                    is_movingf = 1;
+                    description.style.opacity = (prs - 50)/11;
+                    prs--;
+                    elem.style.width = prs + '%';
+                    if (side == "left") {
+                        another.style.left = prs + '%';
+                        another.style.width = 100 - prs + '%';
+                    } else {
+                        elem.style.left = 100 - prs + '%';
+                        another.style.width = 100 - prs + '%';
+                    }
+                }
             }
-
-        }}
+        }
     }
-}
 
-var mouseOverFunction = function () {
-
-         if (this == right) {
-             ask.style.color = '#fff';
-             this.style.color = '#fff';
-             expand("right");
-         } else {
-             discuss.style.color = '#fff';
-             this.style.color = '#fff';
-             // while (!in_center){}
-             //in_center = 0;
-             expand("left");
-         }
- //    }
+    var mouseOverFunction = function () {
+         if (is_movinge || is_movingf) {return;}
+        if (this == right) {
+            ask.style.color = '#fff';
+            this.style.color = '#fff';
+            expand("right");
+        } else {
+            discuss.style.color = '#fff';
+            this.style.color = '#fff';
+            expand("left");
+        }
      };
-   // sleep(900)
-function sleep(ms) {
-    ms += new Date().getTime();
-    while (new Date() < ms){}
-}
-var mouseOutFunction = function () {
-    if (this == right) {
+    /*
+    function sleep(ms) {
+        ms += new Date().getTime();
+        while (new Date() < ms){}
+    }
+    */
+    var mouseOutFunction = function () {
+        if (is_movingf || (in_center && !is_movinge)) {return;}
+        if (this == right) {
             ask.style.color = '#000';
             this.style.color = '#000';
-            //in_center = 0;
-         //   right.onmouseout = mouseOutFunction;
-            less("right");
-
+            filch("right");
         } else {
             discuss.style.color = '#000';
             this.style.color = '#000';
-            //in_center = 0;
-    //        left.onmouseout = mouseOutFunction;
-            less("left");
-
+            filch("left");
         }
+    };
 
-};
-
-right.onmouseover = mouseOverFunction;
-right.onmouseout = mouseOutFunction;
-left.onmouseover = mouseOverFunction;
-left.onmouseout = mouseOutFunction;
-
-
-
+    right.onmouseover = mouseOverFunction;
+    right.onmouseout = mouseOutFunction;
+    left.onmouseover = mouseOverFunction;
+    left.onmouseout = mouseOutFunction;
 
 </script>
         </body>
