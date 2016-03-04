@@ -30,7 +30,8 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-
+"""
 class Photo(models.Model):
     post = models.ForeignKey(Post, related_name='photos')
     image = models.ImageField(upload_to="%Y/%m/%d")
+"""
