@@ -14,20 +14,18 @@ UPD:
 * Создание пользователей, автоматическая отсылка писем для подтверждения регистрации
 * Sign up / Log in
 * Уровни контента:
-
     Для блока "Discuss":
 
-
-    Topics:
-        Threads:
-            Comments
+        Topics:
+            Threads:
+                Comments
 
     Для блока "Ask":
 
+        Themes
+            Questions:
+                Answers
 
-    Themes
-        Questions:
-            Answers
 
 * Возможность добавления нового объекта в каждый из уровней
 * Черные списки и блокировка пользователей
