@@ -1,29 +1,44 @@
-{% load staticfiles %}
-    <html>
+ {% extends 'blog/index.html' %}
+ {% block content %}
      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-               <body>
-        <div id = 'right_black' style='position:absolute;top:0;left:50%;width:50%;height:100%;background-color:  #000;'>
-        <h1 style="text-align:center;  padding-left: 30%; padding-top: 30%; width:50%; text-size : 10; color: white; word-wrap: normal;">{{ "Here you can discuss everything you want, so just enjoy!" }}</h1>
-        </div>";
+<body style="height:98%">
 
-        <div id = 'left_black' style='position:absolute;top:0;left:0; width:50%;height:100%;background-color:  #000;'>
-        <h1 style="text-align:center;  padding-left: 10%; padding-top: 30%; width:50%; text-size : 10; color: white; word-wrap: normal;">{{ "Here you can ask or answer questions, or find information you need!" }}</h1>
-        </div>";
-        <div id = 'left_column' style="position:absolute;top:0;left:0;width:50%;height:100%;background-color:  #00cc99;">
-<p style="text-align:center">  <a href="{% url 'post_list'%}"> <span id="left" class="fa fa-comments-o" style="font-size: 300px; color: black; margin-top: 100px;
-padding-left: 30%; margin-right: 20%" >
-    </span> </a> </p>
-<h1 style="text-align:center; " id="discuss"> <font face ='Yu Gothic Light', size = 30">Discuss</font></h1>
-</div>
+    <div id = 'right_black' style='position:absolute;top:0;left:50%;width:50%;height:100%;background-color:  #000;'>
+        <h1 style="text-align:center;  padding-left: 40%; padding-top: 40%; width:80%; font-size: 4vh; color: white; word-wrap: normal;">
+            {{ "Here you can discuss everything you want, so just enjoy!" }}
+        </h1>
+    </div>";
+
+    <div id = 'left_black' style='position:absolute;top:0;left:0; width:50%;height:100%;background-color:  #000;'>
+        <h1 style="text-align:center;  padding-left: 18%; padding-top: 40%; width:50%; font-size: 4vh; color: white; word-wrap: normal;">
+            {{ "Here you can ask or answer questions, or find information you need!" }}
+        </h1>
+    </div>";
+
+    <div id = 'left_column' style="position:absolute;top:0;left:0;width:50%;height:100%;background-color:  #00cc99;">
+        <p style="text-align:center">
+            <a href="{% url 'post_list'%}">
+                <span id="left" class="fa fa-comments-o" style="position:relative; font-size: 17vw; color: black; margin-top: 30vh; padding-left: 30%; margin-right: 20%" >
+                </span>
+            </a>
+        </p>
+    <h1 style="text-align:center; font-size: 5vw; padding-left: 10vh" id="discuss">
+        <font face ='Yu Gothic Light'>Discuss</font>
+    </h1>
+    </div>
 
 
-<div  id = 'right_column' style="position:absolute;top:0;left:50%;width:50%;height:100%;background-color: #993333;">
-<p style="text-align:center">  <span id="right" class="fa fa-question-circle" style="font-size: 300px; color: black; margin-top: 100px;
-margin-left: 20%; padding-right: 30% ">
-    </span></p>
-<h1 style="text-align:center;  padding-right: 10%" id="ask"> <font face ='Yu Gothic Light', size = 30">Ask</font></h1>
-</div>
+    <div  id = 'right_column' style="position:absolute;top:0;left:50%;width:50%;height:100%;background-color: #993333;">
+    <p style="text-align:center">
+        <span id="right" class="fa fa-question-circle" style="font-size: 17vw; color: black; margin-top: 30vh;margin-left: 20%; padding-right: 25% ">
+        </span>
+    </p>
+
+    <h1 style="text-align:center;  font-size: 5vw; padding-right: 3vw" id="ask">
+        <font face ='Yu Gothic Light'>Ask</font>
+    </h1>
+    </div>
 
 
 <script>
@@ -35,6 +50,7 @@ margin-left: 20%; padding-right: 30% ">
     var left_column = document.getElementById('left_column');
 
     var discuss = document.getElementById('discuss');
+
     var ask = document.getElementById('ask');
     var in_center = 1;
     var is_expanded = 0;
@@ -174,5 +190,5 @@ margin-left: 20%; padding-right: 30% ">
     left.onmouseout = mouseOutFunction;
 
 </script>
-        </body>
-    </html>
+</body>
+ {% endblock content %}

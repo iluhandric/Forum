@@ -1,25 +1,27 @@
-{% load staticfiles %}
-    <html>
+ {% extends 'blog/home_page.html' %}
+
+
+ {% block content %}
+
         <head>
             <title>Imageboard</title>
-            <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-            <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-            <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Didact+Gothic" />
-            <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+           <!--  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Didact+Gothic" />
+           <link rel="stylesheet" href="{ static 'css/blog.css' %}">-->
         </head>
-        <body>
-            <div class="page-header">
-                <h1 align="center"><a href="/">Discussion</a></h1>
+        <body style="z-index: 10">
+            <div class="header" style="text-align: left; margin-top: 60px; ">
+                <h1 align="left" style=" display: flex; "><a style = "color : #000;background-color: #00cc99; padding: 10px"href="/">Discussions</a></h1>
             </div>
             <div class="content container">
-                <div class="row">
-                    <div class="col-md-8">
-                        {% block content %}
-                        {% endblock %}
+                <!--<div class="row">-->
+                    <div class="col-md-16">
+                        {% block posts %}
+                        {% endblock posts%}
                         {% block new_form %}
-                        {% endblock %}
+                        {% endblock new_form%}
                     </div>
-                </div>
+
             </div>
         </body>
-    </html>
+{% endblock content%}
+
