@@ -38,8 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
-   # 'mysite.blog'
-#    'rest_framework'
+
+#   'mysite.blog'    'rest_framework'
 )
 
 REST_FRAMEWORK = {
@@ -151,8 +151,13 @@ LOGGING = {
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'blog/media')
+
 
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'blog/static')
-#AUTH_USER_MODEL = 'blog.User'
+# AUTH_USER_MODEL = 'blog.User'
+
+

@@ -1,0 +1,28 @@
+.tname{
+        color: #CC3434;
+        z-index: 1000;
+                           background-color:rgba(0, 0, 0, 0.7); text-align: center; margin-bottom: 5%; margin-top: -6%;
+                           position: absolute ;
+    }
+    .tname:default{
+         color: #CC3434;
+        z-index: 1000; color: white;
+                           background-color:rgba(0, 0, 0, 0.7); text-align: center; margin-bottom: 5%; margin-top: -6%;
+                           position: absolute;
+        }
+    .tname:hover{
+        color: #CC3434;
+        z-index: 1000;
+                           background-color:rgba(0, 0, 0, 0.7); text-align: center; margin-bottom: 5%; margin-top: -6%;
+                           position: absolute ;
+    }
+    .tname:active{
+        color: #CC3434;
+        z-index: 1000;
+                           background-color:rgba(0, 0, 0, 0.7); text-align: center; margin-bottom: 5%; margin-top: -6%;
+                           position: absolute ;}
+
+
+    .btn-hover{
+        color: #00cc99;
+    }

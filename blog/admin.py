@@ -1,9 +1,9 @@
 from django.contrib import admin
 
-"""from .models import User, Post, Photo
+from .models import  Post, Thread, Topic, Comment
 
-
-admin.site.register(User)
 admin.site.register(Post)
-admin.site.register(Photo)
-"""
+admin.site.register(Thread)
+admin.site.register(Topic)
+admin.site.register(Comment)
+

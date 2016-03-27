@@ -3,14 +3,54 @@ from django.shortcuts import render
 # Create your views here.
 from django.shortcuts import render
 from django.utils import timezone
-from .models import Post
-from .forms import PostForm
+from .models import *
+from .forms import *
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 
 
 def index(request):
     return render(request, 'blog/index.html')
+
+
+def view_topics(request):
+    topics = Topic.objects.filter()
+    return render(request, 'blog/topics.html', {'topics': topics})
+
+
+def thread(request, pk):
+    cur_thread = get_object_or_404(Thread, pk=pk)
+    comments = cur_thread.comments.all
+    form = CommentForm(request.POST)
+
+    print(cur_thread.parent)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.parent = pk
+        comment.save()
+        cur_thread.comments.add(comment)
+        return redirect('blog.views.thread', pk=pk)
+    form = CommentForm()
+    return render(request, 'blog/thread.html', {'cur_thread': cur_thread, 'comments':comments, 'form': form})
+
+def topic(request, pk):
+    cur_topic = get_object_or_404(Topic, pk=pk)
+    threads = cur_topic.threads.all
+    form = ThreadForm(request.POST)
+    if form.is_valid():
+        thread = form.save(commit=False)
+
+        try:
+            identical = Thread.objects.get(topic=pk, title=thread.title)
+
+        except Thread.DoesNotExist:
+            thread.parent = pk
+            thread.save()
+            thread.parent = pk
+            cur_topic.threads.add(thread)
+            return redirect('blog.views.topic', pk=pk)
+    form = ThreadForm()
+    return render(request, 'blog/topic.html', {'cur_topic': cur_topic, 'threads':threads, 'form': form})
 
 
 def post_list(request):
