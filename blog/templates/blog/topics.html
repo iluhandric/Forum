@@ -1,66 +1,62 @@
- {% extends 'blog/index.html' %}
+ {% extends 'blog/discussions.html' %}
 <link rel="stylesheet" href="css/style.css">
- {% block content %}
+
+{% block content %}
+    <style>
+
+    </style>
     <ol class="breadcrumb" style="; font-size: large; height: 7%">
-              <li class="active">Choose Topic</li>
-        </ol>
-     <body style="z-index: 10">
+        <li class="active">Choose Topic</li>
+    </ol>
+    <body style="z-index: 10">
 
-       <div class="container" style="margin: auto">
-
-
-
-                {% for topic in topics %}
-            <div style="display: inline-block; width: 250px;
-    height: 350px;
-    margin: 5%; ;  vertical-align: middle; " >
+    <div class="container-fluid" style="margin: auto">
+    {% for topic in topics %}
+        <div style="width: 100%;
+    height: 150px; vertical-align: middle; " >
             <a class="button" id = {{ topic.pk }} href="{% url 'topic' pk=topic.pk %}" style="background: #fff; z-index : 500;
-            display: inline">
-                            <div  class = "logot" style= " position:relative;
-                            background: url({{ MEDIA_URL }}{{ topic.logo.url }});
-
-
-                                    height:100%;
-                            width:100%" ></div>
-                                    <h1 id="tname" style="color: white;
-        z-index: 1000;
-                           background-color:rgba(0, 0, 0, 0.7); text-align: center; margin-bottom: 5%; margin-top: -15%;
-                           position: relative ;">
-                               {{ topic.title|linebreaks }}</h1>
-                        </a>
-            </div>
-
-                {% endfor %}
-</div>
-
-    <script>
-
-     // var pictures = [];
+        display: inline; text-decoration: none !important;">
+                <div  class = "logot" style= " position:relative;
+                background: url({{ MEDIA_URL }}{{ topic.logo.url }});
+                height:100%; width:100%" >
+                    <div  style=" color: white;
+                z-index: 100; text-decoration: none !important;
+                text-underline: none;
+                background-color:rgba(0, 0, 0, 0.5); text-align: left; vertical-align: bottom; height: 100%; margin-top: 0;
+                position: relative ;">
+                        <font class="topic-name" face ='Yu Gothic Light' size=150px style=" color: white;
+                z-index: 1000; text-decoration: none !important; z-index: 1000;
+                text-underline: none; text-align: left; vertical-align: bottom; height: 100%; margin-top: 0;
+                position: relative ;">
+                            {{ topic.title|linebreaks }}
+                        </font>
+                    </div>
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+    </div>
+</body>
+<script>
      var buts = document.getElementsByClassName('button');
      var pictures = document.getElementsByClassName('logot');
      var dict = {};
      var mouseOverFunction = function() {
-          //style.background = 'hsla(180,0%,50%,0.25)';
           pictures[dict[this.id]].style.webkitFilter = "opacity(1)";
       };
        var mouseOutFunction = function() {
-          pictures[dict[this.id]].style.webkitFilter = "opacity(0.5)";
+          pictures[dict[this.id]].style.webkitFilter = "opacity(0.3)";
       };
      for (var i = 0; i < buts.length; i++) {
          buts[i].onmouseover = mouseOverFunction;
          buts[i].onmouseout = mouseOutFunction;
          dict[buts[i].id] = i;
-         pictures[dict[buts[i].id]].style.webkitFilter = "opacity(0.5)";
+         pictures[dict[buts[i].id]].style.webkitFilter = "opacity(0.3)";
      }
 
+</script>
 
 
-
-
-
-     </script>
-
-    </body>
 
 
 {% endblock content%}

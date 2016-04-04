@@ -1,0 +1,20 @@
+ {% extends 'blog/index.html' %}
+<link rel="stylesheet" href="css/style.css">
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,100' rel='stylesheet' type='text/css'>
+{% block section %}
+
+{#    <div   align="center" class="container-fluid" style=" z-index: 55555; top: 5px;#}
+{#     font-size: x-large;position: absolute; width: 400px; left: 40%">#}
+{#        <div align="left" >#}
+{#            <font face ='Yu Gothic Light' color="#f0f8ff">Discussions</font>#}
+{#        </div>#}
+{#    </div>#}
+
+<div class="container-fluid">
+ {% block content %}
+{% endblock content%}
+</div>
+{% endblock section%}
+
+
+

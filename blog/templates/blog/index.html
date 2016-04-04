@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>DAcom</title>
+    <title>Forum</title>
 
     <meta name="description" content="Source code generated using layoutit.com">
     <meta name="author" content="LayoutIt!">
@@ -54,11 +54,11 @@
     background-color: rgba(231, 231, 231, 1);
 }
 .navbar-default :hover {
-    border-color: #f00;
+    border-color: #aaa;
 }
 .navbar-default .navbar-toggle:hover,
 .navbar-default .navbar-toggle:focus {
-    background-color: #f00;
+    background-color: #fff;
 }
 .navbar-default .navbar-toggle .icon-bar {
     background-color: #888;
@@ -71,31 +71,22 @@
   <body>
 
    <div id="custom-bootstrap-menu" class="navbar navbar-default navbar-static-top " role="navigation">
-{#    <div class="container-fluid">#}
-        <div class="navbar-header"><a class="navbar-brand">DAcom</a>
+        <div class="navbar-header"><a href="/" class="navbar-brand">! i ?</a>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
             </button>
         </div>
         <div class="collapse navbar-collapse navbar-menubuilder">
-            <ul class="nav navbar-nav navbar-left">
-                <li><a href="/">Home</a>
-                </li>
-            </ul>
             <ul class="nav navbar-nav navbar-right">
-{#              <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>#}
-{#              <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Log In</a></li>#}
+            {#  Here sign up section    #}
             </ul>
         </div>
-{#    </div>#}
 </div>
 
     <script src="../../static/jquery.min.js"></script>
     <script src="../../static/bootstrap.min.js"></script>
     <script src="../../static/scripts.js"></script>
-  <!-- <div class="content container">
-             <!--  <div class="row">-->
 <div class="container-fluid">
-  {% block content %}
+  {% block section %}
   {% endblock %}
 </div> <!--        </div>
                 </div>-->

@@ -1,26 +1,39 @@
- {% extends 'blog/index.html' %}
+ {% extends 'blog/discussions.html' %}
 <link rel="stylesheet" href="css/style.css">
  {% block content %}
     <ol class="breadcrumb" style="font-size: large">
                 <li><a href="{% url 'view_topics'%}">Choose Topic</a></li>
-                <li class="active" > ... </li>
-              <li class="active">{{ cur_thread.title }}</li>
+                <li > <a href="{% url 'topic' pk=cur_parent.pk %}">{{ cur_parent.title }}</a></li>
+                <li > <a href="{% url 'threads' pk=cur_parent.pk %}">Threads</a></li>
+                <li class="active">{{ cur_thread.title }}</li>
         </ol>
-     <body style="z-index: 190">
+     <div class="container-fluid" style="z-index: 190; left: 0; position: absolute; width: 100%;
+            background: url({{ MEDIA_URL }}{{ cur_parent.logo.url }}); min-height: 100%">
 
 
-       <div class="container">
+       <div class="container" style="font-size: 25px; height: 100%; background-color: white">
+                <div >Title: <br>   {{ cur_thread.title }}</div>
+                <hr>
+                Tags:<br>
+                {% for tag in cur_thread.parsed_tags.all %}
+                    <txt  style="height: 50px; display: inline-block; margin-right: 10px; font-size: 25px;
+                    color: #777"> {{tag.title }}  </txt>
 
 
-
+                {% endfor %}
+                       <hr>
+                <div class="block" style="word-break: break-all;">Description: <br>{{ cur_thread.body }}</div>
+ <hr>
                 {% for comment in comments %}
 
                     <h1 class="textline"  style="font-size: x-large; " >
-                                    example user : {{ comment.text}}
+                                    example user : "{{ comment.text}}"
                     </h1>
 
 
                 {% endfor %}
+
+
        <hr>
             <div class="form-group" style="margin: 10px">
                 <form method="POST" type="text" class="form" style="width: 60%; ">
@@ -41,7 +54,7 @@
 
 </div>
 
-    </body>
+    </div>
 
 
 {% endblock content%}

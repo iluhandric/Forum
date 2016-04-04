@@ -10,6 +10,18 @@ class User(AbstractUser):
     followers = models.ManyToManyField('self', related_name='followees', symmetrical=False)
 """
 
+import os
+def get_image_path(instance, filename):
+    return os.path.join('./media', str(instance.id), filename)
+
+class Tag(models.Model):
+    title = models.CharField(max_length=30)
+    uses = models.BigIntegerField(blank=False)
+    parent = models.BigIntegerField(blank=False)
+
+    def __str__(self):
+        return self.title
+
 
 class Post(models.Model):
     author = models.ForeignKey('auth.User')
@@ -39,16 +51,16 @@ class Photo(models.Model):
 class Comment(models.Model):
     text = models.CharField(max_length=100)
     parent = None  # getting by Thread.objects.get(pk=self.parent)
-
-    def add_comment(self):
-        self.save()
-        Thread.objects.get(pk=self.parent).comments.add(self)
-
-    def get_parent(self):
-        return Thread.objects.get(pk=self.parent)
-
-    def remove(self):
-        self.delete()
+    #
+    # def add_comment(self):
+    #     self.save()
+    #     Thread.objects.get(pk=self.parent).comments.add(self)
+    #
+    # def get_parent(self):
+    #     return Thread.objects.get(pk=self.parent)
+    #
+    # def remove(self):
+    #     self.delete()
 
     def __str__(self):
         return self.text
@@ -56,25 +68,24 @@ class Comment(models.Model):
 
 class Thread(models.Model):
     title = models.CharField(max_length=100)
-    parent = 10  # getting by Topic.objects.get(pk=self.parent)
+    body = models.TextField()
+    parent = models.BigIntegerField(blank=False)
     comments = models.ManyToManyField(Comment, blank=True)
-
-    def get_parent(self):
-        return Topic.objects.get(pk=self.parent)
-
-    def add_thread(self):
-        self.save()
-        Topic.objects.get(pk=self.parent).threads.add(self)
-
-    def remove(self):
-        self.delete()
+    tags = models.CharField(max_length=200)
+    parsed_tags = models.ManyToManyField(Tag, blank=True)
+    # def get_parent(self):
+    #     return Topic.objects.get(pk=self.parent)
+    #
+    # def add_thread(self):
+    #     self.save()
+    #     Topic.objects.get(pk=self.parent).threads.add(self)
+    #
+    # def remove(self):
+    #     self.delete()
+    #
 
     def __str__(self):
-        return self.title
-
-import os
-def get_image_path(instance, filename):
-    return os.path.join('./media', str(instance.id), filename)
+         return self.title
 
 
 class Topic(models.Model):
@@ -83,7 +94,7 @@ class Topic(models.Model):
     text = models.TextField(blank=True, null=True)
     logo = models.ImageField(upload_to='')
     threads = models.ManyToManyField(Thread, blank=True)
-    colnum = models.BigIntegerField(blank=False)
+    tags = models.ManyToManyField(Tag, blank=True)
 
     def add_topic(self):
         self.save()

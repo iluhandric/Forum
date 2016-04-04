@@ -1,0 +1,38 @@
+ {% extends 'blog/discussions.html' %}
+<link rel="stylesheet" href="css/style.css">
+ {% block content %}
+     <ol class="breadcrumb" style="font-size: large">
+        <li ><a href="{% url 'view_topics'%}">Choose Topic</a></li>
+        <li><a href="{% url 'topic' pk=cur_topic.pk%}">{{cur_topic.title }}</a></li>
+        <li class="active">Treads</li>
+     </ol>
+
+     <div class="container-fluid" style="z-index: 190; left: 0; position: absolute; width: 100%;
+            background: url({{ MEDIA_URL }}{{ cur_topic.logo.url }});min-height: 100% ">
+
+       <div class="container" style="background-color: #ffffff; height: 100%" >
+           <ul class="list-group">
+           {% for thread in threads %}
+
+                <a class="list-group-item" href="{% url 'thread'  par=cur_topic.pk pk=thread.pk%}" role="button" style="font-size: x-large; margin: 5px" >
+                                {{ thread.title|linebreaks }}
+                </a>
+
+
+            {% endfor %}
+           <ul>
+       <hr>
+        <div class="form-group" style="margin: 10px">
+            <form method="POST" type="text" class="form" style="width: 60%; ">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-default" style="background-color:#00cc99; position: relative; ">Add thread</button>
+            </form>
+        </div>
+</div>
+
+    </div>
+
+
+{% endblock content%}
+

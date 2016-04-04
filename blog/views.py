@@ -17,8 +17,12 @@ def view_topics(request):
     topics = Topic.objects.filter()
     return render(request, 'blog/topics.html', {'topics': topics})
 
+def tags(request, pk):
+    cur_topic = get_object_or_404(Topic, pk=pk)
+    tags = Tag.objects.filter(parent=pk).order_by('-uses') #= cur_topic.tags.all
+    return render(request, 'blog/tags.html', {'cur_topic': cur_topic, 'tags':tags})
 
-def thread(request, pk):
+def thread(request, par, pk):
     cur_thread = get_object_or_404(Thread, pk=pk)
     comments = cur_thread.comments.all
     form = CommentForm(request.POST)
@@ -29,28 +33,46 @@ def thread(request, pk):
         comment.parent = pk
         comment.save()
         cur_thread.comments.add(comment)
-        return redirect('blog.views.thread', pk=pk)
+        return redirect('blog.views.thread', par=par, pk=pk)
     form = CommentForm()
-    return render(request, 'blog/thread.html', {'cur_thread': cur_thread, 'comments':comments, 'form': form})
+    cp = get_object_or_404(Topic, pk=cur_thread.parent)
+    return render(request, 'blog/thread.html', {'cur_thread': cur_thread, 'comments':comments, 'form': form, 'cur_parent': cp })
 
-def topic(request, pk):
+
+def threads(request, pk):
     cur_topic = get_object_or_404(Topic, pk=pk)
     threads = cur_topic.threads.all
     form = ThreadForm(request.POST)
     if form.is_valid():
         thread = form.save(commit=False)
-
         try:
-            identical = Thread.objects.get(topic=pk, title=thread.title)
+            Thread.objects.get(parent=pk, title=thread.title)
 
         except Thread.DoesNotExist:
             thread.parent = pk
             thread.save()
+            tag_object = None
+            for tag in str(thread.tags).split(' '):
+                try:
+                    tag_object = Tag.objects.get(parent=pk, title=tag)
+                    tag_object.uses += 1
+                except Tag.DoesNotExist:
+                    tag_object = Tag(parent=pk, title=tag, uses=0)
+                    tag_object.uses = 1
+                tag_object.save()
+                thread.parsed_tags.add(tag_object)
+            thread.save()
             thread.parent = pk
+
             cur_topic.threads.add(thread)
-            return redirect('blog.views.topic', pk=pk)
+            return redirect('blog.views.threads', pk=pk)
     form = ThreadForm()
-    return render(request, 'blog/topic.html', {'cur_topic': cur_topic, 'threads':threads, 'form': form})
+    return render(request, 'blog/threads.html', {'cur_topic': cur_topic, 'threads':threads, 'form': form})
+
+
+def topic(request, pk):
+    cur_topic = get_object_or_404(Topic, pk=pk)
+    return render(request, 'blog/topic.html', {'cur_topic': cur_topic})
 
 
 def post_list(request):

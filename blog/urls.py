@@ -13,5 +13,7 @@ urlpatterns = [
     url(r'^blog/(?P<pk>[0-9]+)$', views.post_remove, name='post_remove'),
     url(r'^blog/post/(?P<pk>[0-9]+)/edit/$', views.post_edit, name='post_edit'),
     url(r'^topic/(?P<pk>[0-9]+)/$', views.topic, name='topic'),
-    url(r'^thread/(?P<pk>[0-9]+)/$', views.thread, name='thread')]
+    url(r'^topic/(?P<pk>[0-9]+)/tags$', views.tags, name='tags'),
+    url(r'^topic/(?P<pk>[0-9]+)/threads$', views.threads, name='threads'),
+    url(r'^topic/(?P<par>[0-9]+)/threads/(?P<pk>[0-9]+)$', views.thread, name='thread')]
 
