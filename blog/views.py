@@ -13,6 +13,17 @@ def index(request):
     return render(request, 'blog/index.html')
 
 
+def search_tag(request, par, pk):
+    cur_topic = get_object_or_404(Topic, pk=par)
+    tag = Tag.objects.get(pk=pk)
+    all_threads = cur_topic.threads.all()
+    threads = []
+    for thread in all_threads:
+        if tag.title in thread.tags:
+            threads.append(thread)
+
+    return render(request, 'blog/tag_results.html', {'cur_topic': cur_topic, 'threads':threads})
+
 def view_topics(request):
     topics = Topic.objects.filter()
     return render(request, 'blog/topics.html', {'topics': topics})
@@ -20,7 +31,7 @@ def view_topics(request):
 def tags(request, pk):
     cur_topic = get_object_or_404(Topic, pk=pk)
     tags = Tag.objects.filter(parent=pk).order_by('-uses') #= cur_topic.tags.all
-    return render(request, 'blog/tags.html', {'cur_topic': cur_topic, 'tags':tags})
+    return render(request, 'blog/tags.html', {'cur_topic': cur_topic, 'tags': tags})
 
 def thread(request, par, pk):
     cur_thread = get_object_or_404(Thread, pk=pk)
@@ -74,62 +85,65 @@ def topic(request, pk):
     cur_topic = get_object_or_404(Topic, pk=pk)
     return render(request, 'blog/topic.html', {'cur_topic': cur_topic})
 
-
-def post_list(request):
-    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
-    #if request.method == "POST":
-    form = PostForm(request.POST)
-    if form.is_valid():
-        post = form.save(commit=False)
-        post.author = request.user
-        post.published_date = timezone.now()
-        post.save()
-        return redirect('blog.views.post_list')
-    else:
-        form = PostForm()
-    return render(request, 'blog/post_list.html', {'posts': posts, 'form' : form})
-
-
 def home_page(request):
-    return render(request, 'blog/home_page.html')
+     return render(request, 'blog/home_page.html')
 
-def post_detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    return render(request, 'blog/post_detail.html', {'post': post})
-
-
-def post_remove(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-   # posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
-    post.remove()
-    return redirect('blog.views.post_list')
-
-
-def post_new(request):
-        if request.method == "POST":
-            form = PostForm(request.POST)
-            if form.is_valid():
-                post = form.save(commit=False)
-                post.author = request.user
-                post.published_date = timezone.now()
-                post.save()
-                return redirect('blog.views.post_list')
-        else:
-            form = PostForm()
-        return render(request, 'blog/post_edit.html', {'form': form})
-
-
-def post_edit(request, pk):
-        post = get_object_or_404(Post, pk=pk)
-        if request.method == "POST":
-            form = PostForm(request.POST, instance=post)
-            if form.is_valid():
-                post = form.save(commit=False)
-                post.author = request.user
-               # post.published_date = timezone.now()
-                post.save()
-                return redirect('blog.views.post_list')
-        else:
-            form = PostForm(instance=post)
-        return render(request, 'blog/post_edit.html', {'form': form})
+#
+# def post_list(request):
+#     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+#     #if request.method == "POST":
+#     form = PostForm(request.POST)
+#     if form.is_valid():
+#         post = form.save(commit=False)
+#         post.author = request.user
+#         post.published_date = timezone.now()
+#         post.save()
+#         return redirect('blog.views.post_list')
+#     else:
+#         form = PostForm()
+#     return render(request, 'blog/post_list.html', {'posts': posts, 'form' : form})
+#
+#
+# def home_page(request):
+#     return render(request, 'blog/home_page.html')
+#
+# def post_detail(request, pk):
+#     post = get_object_or_404(Post, pk=pk)
+#     return render(request, 'blog/post_detail.html', {'post': post})
+#
+#
+# def post_remove(request, pk):
+#     post = get_object_or_404(Post, pk=pk)
+#    # posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+#     post.remove()
+#     return redirect('blog.views.post_list')
+#
+#
+# def post_new(request):
+#         if request.method == "POST":
+#             form = PostForm(request.POST)
+#             if form.is_valid():
+#                 post = form.save(commit=False)
+#                 post.author = request.user
+#                 post.published_date = timezone.now()
+#                 post.save()
+#                 return redirect('blog.views.post_list')
+#         else:
+#             form = PostForm()
+#         return render(request, 'blog/post_edit.html', {'form': form})
+#
+#
+# def post_edit(request, pk):
+#         post = get_object_or_404(Post, pk=pk)
+#         if request.method == "POST":
+#             form = PostForm(request.POST, instance=post)
+#             if form.is_valid():
+#                 post = form.save(commit=False)
+#                 post.author = request.user
+#                # post.published_date = timezone.now()
+#                 post.save()
+#                 return redirect('blog.views.post_list')
+#         else:
+#             form = PostForm(instance=post)
+#         return render(request, 'blog/post_edit.html', {'form': form})
 

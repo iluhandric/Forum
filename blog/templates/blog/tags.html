@@ -15,7 +15,7 @@
 
             {% for tag in tags %}
         
-                <a class="btn btn-default"  role="button" style="font-size: x-large; margin: 5px" >
+                <a class="btn btn-default"  href = "{% url 'search_tag' par=cur_topic.pk pk=tag.pk%}" role="button" style="font-size: x-large; margin: 5px" >
                                 {{ tag.title }} <span class="badge">{{ tag.uses }}</span>
                 </a>
         
