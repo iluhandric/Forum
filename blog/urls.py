@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^$', views.home_page, name='home_page'),
     #url(r'^$', views.index, name='index'),
     url(r'^topics/$', views.view_topics, name='view_topics'),
+    url(r'^ask/$', views.ask, name='ask'),
     # url(r'^blog/$', views.post_list, name='post_list'),
     # url(r'^blog/post/(?P<pk>[0-9]+)/$', views.post_detail, name='post_detail'),
     # url(r'^blog/post/new/$', views.post_new, name='post_new'),

@@ -8,10 +8,12 @@ from .forms import *
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 
-
 def index(request):
     return render(request, 'blog/index.html')
 
+
+def ask(request):
+    return render(request, 'blog/ask.html')
 
 def search_tag(request, par, pk):
     cur_topic = get_object_or_404(Topic, pk=par)
@@ -22,7 +24,7 @@ def search_tag(request, par, pk):
         if tag.title in thread.tags:
             threads.append(thread)
 
-    return render(request, 'blog/tag_results.html', {'cur_topic': cur_topic, 'threads':threads})
+    return render(request, 'blog/tag_results.html', {'cur_topic': cur_topic, 'threads':threads, 'cur_tag': tag})
 
 def view_topics(request):
     topics = Topic.objects.filter()
@@ -35,17 +37,19 @@ def tags(request, pk):
 
 def thread(request, par, pk):
     cur_thread = get_object_or_404(Thread, pk=pk)
-    comments = cur_thread.comments.all
+
     form = CommentForm(request.POST)
 
     print(cur_thread.parent)
     if form.is_valid():
         comment = form.save(commit=False)
         comment.parent = pk
+        comment.time_posted = timezone.now()
         comment.save()
         cur_thread.comments.add(comment)
         return redirect('blog.views.thread', par=par, pk=pk)
     form = CommentForm()
+    comments = cur_thread.comments.all().order_by('-time_posted')
     cp = get_object_or_404(Topic, pk=cur_thread.parent)
     return render(request, 'blog/thread.html', {'cur_thread': cur_thread, 'comments':comments, 'form': form, 'cur_parent': cp })
 
@@ -63,7 +67,10 @@ def threads(request, pk):
             thread.parent = pk
             thread.save()
             tag_object = None
+            tag_set = set()
             for tag in str(thread.tags).split(' '):
+                tag_set.add(tag)
+            for tag in tag_set:
                 try:
                     tag_object = Tag.objects.get(parent=pk, title=tag)
                     tag_object.uses += 1

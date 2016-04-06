@@ -16,18 +16,18 @@
             {% for tag in tags %}
         
                 <a class="btn btn-default"  href = "{% url 'search_tag' par=cur_topic.pk pk=tag.pk%}" role="button" style="font-size: x-large; margin: 5px" >
-                                {{ tag.title }} <span class="badge">{{ tag.uses }}</span>
+                                {{ tag.title }} <span class="badge" style="background-color: #aaaaaa">{{ tag.uses }}</span>
                 </a>
         
         
             {% endfor %}
                 {% else %}
-                <font class="topic-name" face ='Yu Gothic Light' size=150px style="
+                 <div align="center"><font class="topic-name" face ='Yu Gothic Light' size=150px style="
                 z-index: 1000; text-decoration: none !important; z-index: 1000;
                 text-underline: none; text-align: left; vertical-align: bottom; height: 100%; margin-top: 0;
                 position: relative ;">
-                            No tags.
-                        </font>
+                            No tags yet.
+                        </font> </div>
             {% endif %}
         </div>
 

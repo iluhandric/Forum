@@ -18,3 +18,9 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ('text',)
+        widgets = {
+           'text': forms.Textarea(attrs={'style': 'height: 100px; width: 100%'})
+        }
+#  add
+#  'rows': 3,'cols': 50,
+#  to make field size constant

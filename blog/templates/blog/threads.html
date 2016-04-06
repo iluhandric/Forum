@@ -12,6 +12,7 @@
 
        <div class="container" style="background-color: #ffffff; height: 100%" >
            <ul class="list-group">
+           {% if threads %}
            {% for thread in threads %}
 
                 <a class="list-group-item" href="{% url 'thread'  par=cur_topic.pk pk=thread.pk%}" role="button" style="font-size: x-large; margin: 5px" >
@@ -20,7 +21,16 @@
 
 
             {% endfor %}
+           {% else %}
+                <div align="center"><font class="topic-name"  face ='Yu Gothic Light' size=150px style="
+                z-index: 1000; text-decoration: none !important; z-index: 1000;
+                text-underline: none; text-align: center; vertical-align: bottom; height: 100%; margin-top: 0;
+                position: relative ;">
+                            No threads yet.
+                        </font>
+                </div>
            </ul>
+       {% endif %}
        <hr>
         <div class="form-group" style="margin: 10px">
             <form method="POST" type="text" class="form" style="width: 200%; ">

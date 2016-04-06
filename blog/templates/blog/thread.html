@@ -14,33 +14,39 @@
 
        <div class="container" style="font-size: 25px; height: 100%; background-color: white">
 
-                <div align="center"> <b><br>{{ cur_thread.title }}</b></div>
-                <hr>
-{#                <h1 align="center">Tags <br> </h1>#}
+                <div align="center"> <b><br>{{ cur_thread.title }}<br><br></b></div>
+
                 {% for tag in cur_thread.parsed_tags.all %}
-                    <h1  style="display: inline-block; margin-right: 10px; font-size: 15px;
-                    color: #777"> {{ tag.title }}  </h1>
+                    <a class="btn btn-default"  href = "{% url 'search_tag' par=cur_parent.pk pk=tag.pk%}" role="button" style=" margin: 5px" >
+                                {{ tag.title }} <span class="badge" style="background-color: #aaaaaa">{{ tag.uses }}</span>
+                </a>
 
 
                 {% endfor %}
                        <hr>
                 <div class="block" style="word-break: break-all;"> {{ cur_thread.body }}</div>
- <hr style="height:1px;border:none;color:#333;background-color:#333;">
-       <h1 align="center"> Comments </h1>
-        <hr>
-                {% for comment in comments %}
+<hr style="height:3px;border:none;color:#c0c0c0;background-color:#c0c0c0; ">
+       <h1 align="center" style=" font-size: x-large" > Comments </h1>
 
-                    <h1 class="textline"  style="font-size: large; " >
+        <hr style="height:3px; width: 60%; border:none;color:#c0c0c0;background-color:#c0c0c0;">
+                {% for comment in comments %}
+                    <div align="right" style="font-size: small; color: #aaaaaa">
+                    {{ comment.time_posted|date:'Y-m-d H:i' }}
+                </div>
+                    <h1 style="font-size: large; word-break: break-all " >
                                     {{ comment.text }}
                     </h1>
-                 <hr>
+                 <hr style="height:1px;border:none;color:#999;background-color:#999;">
 
                 {% endfor %}
 
-            <div class="form-group" style="margin: 10px">
-                <form method="POST" type="text" class="form" style="width: 60%; ">
+            <div class="form-group" style="margin: 10px; width: 100%">
+                <form method="POST" type="text" class="" style="width: 60%; height: 30% ">
                     {% csrf_token %}
-                    {{ form.as_p }}
+                    {% for field in form %}
+                        <div style="height: 20%"> {{ field }} </div>
+                    {% endfor %}
+                <br>
                     <button type="submit" class="btn btn-default" style="background-color:#00cc99; position: relative; ">Add comment</button>
                 </form>
             </div>
