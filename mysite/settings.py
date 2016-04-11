@@ -25,7 +25,7 @@ SECRET_KEY = '8gqc5^qds1af!6w3f&6p863p*68&16#&9whleo&!o&&ymfwu&h'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ '*']
 
 
 # Application definition
@@ -37,7 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog',
+    'blog','rest_framework'
 
 #   'mysite.blog'    'rest_framework'
 )
@@ -46,8 +46,13 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+        # 'rest_framework.permissions.DjangoModelPermissions',
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        # 'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.AllowAny',
+
+    ],
+
 }
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -154,10 +159,13 @@ LOGGING = {
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'blog/media')
 
-
+PIPELINE_COMPILERS = (
+  'react.utils.pipeline.JSXCompiler',
+)
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'blog/static')
 # AUTH_USER_MODEL = 'blog.User'
 
 
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'

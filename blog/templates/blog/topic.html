@@ -8,7 +8,7 @@
         <li class="active">{{ cur_topic.title }} </li>
     </ol>
     <div class="container-fluid" style="height: 80%; left: 0; position: absolute; width: 100%;
-            background: url({{ MEDIA_URL }}{{ cur_topic.logo.url }});">
+            background: url({{ MEDIA_URL }}{{ cur_topic.logo.url }});min-height: 100%">
 
 
         <a href="{% url 'threads' pk=cur_topic.pk%}">

@@ -4,7 +4,7 @@ from django.db import models
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
-
+#from django.contrib.postgres.fields import ListField
 """
 class User(AbstractUser):
     followers = models.ManyToManyField('self', related_name='followees', symmetrical=False)
@@ -12,9 +12,28 @@ class User(AbstractUser):
 
 import os
 
+import uuid
+import os
+
+
+def get_unique_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (uuid.uuid4(), ext)
+    return os.path.join('./', filename)
+
 
 def get_image_path(instance, filename):
     return os.path.join('./media', str(instance.id), filename)
+
+
+class Blocked(models.Model):
+    address = models.CharField(max_length=100, default='u')
+
+
+
+class Admin(models.Model):
+    cur_ip = models.CharField(max_length=100, default='127.0.0.1')
+    password = models.CharField(max_length=100, default='password')
 
 
 class Tag(models.Model):
@@ -53,18 +72,28 @@ class Photo(models.Model):
 class Comment(models.Model):
     text = models.TextField(max_length=200)
     time_posted = models.DateTimeField(default=timezone.now)
-
+    image = models.ImageField(upload_to=get_unique_path, blank=True)
+    author_ip = models.CharField(max_length=100, default='unknown')
     def __str__(self):
         return self.text
 
 
+class UserIp(models.Model):
+    ip = models.CharField(max_length=100, default='unknown')
+    last_request = models.DateTimeField(default=timezone.now)
+    def __str__(self):
+        return self.ip
+
 class Thread(models.Model):
     title = models.CharField(max_length=100)
-    body = models.TextField()
+    text = models.TextField(blank=True, max_length=500)
     parent = models.BigIntegerField(blank=False)
     comments = models.ManyToManyField(Comment, blank=True)
-    tags = models.CharField(max_length=200)
+    tags = models.CharField(max_length=200, blank=True)
     parsed_tags = models.ManyToManyField(Tag, blank=True)
+    time_posted = models.DateTimeField(default=timezone.now)
+    image = models.ImageField(upload_to=get_unique_path, blank=True)
+    users = models.TextField(blank=True)
 
     def __str__(self):
         return self.title
@@ -77,7 +106,7 @@ class Topic(models.Model):
     # path_to_logo = ''
     # path_to_logo += str(title)
 
-    logo = models.ImageField(upload_to='')
+    logo = models.ImageField(upload_to=get_unique_path)
     threads = models.ManyToManyField(Thread, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
 

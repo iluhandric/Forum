@@ -1,0 +1,17 @@
+ {% extends 'blog/index.html' %}
+<link rel="stylesheet" href="css/style.css">
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,100' rel='stylesheet' type='text/css'>
+{% block section %}
+
+<div class="container-fluid" style="text-align: center">
+<font face ='Yu Gothic Light' size="21px"> Password </font>
+<form method="POST" type="text" class="form" enctype="multipart/form-data">
+    {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-default" style="background-color:#00cc99; position: relative; ">Log in</button>
+</form>
+</div>
+{% endblock section%}
+
+
+

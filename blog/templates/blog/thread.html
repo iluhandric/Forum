@@ -1,69 +1,163 @@
- {% extends 'blog/discussions.html' %}
+{% extends 'blog/discussions.html' %}
 <link rel="stylesheet" href="css/style.css">
- {% block content %}
+
+{#<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.0.0/react.js"></script>#}
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.0.0/react-dom.js"></script>#}
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>#}
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>#}
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js"></script>#}
+{% block content %}
+
     <ol class="breadcrumb" style="font-size: large">
-                <li><a href="{% url 'view_topics'%}">Choose Topic</a></li>
-                <li > <a href="{% url 'topic' pk=cur_parent.pk %}">{{ cur_parent.title }}</a></li>
-                <li > <a href="{% url 'threads' pk=cur_parent.pk %}">Threads</a></li>
-                <li class="active">{{ cur_thread.title }}</li>
-        </ol>
+        <li><a href="{% url 'view_topics'%}">Choose Topic</a></li>
+        <li > <a href="{% url 'topic' pk=cur_parent.pk %}">{{ cur_parent.title }}</a></li>
+        <li > <a href="{% url 'threads' pk=cur_parent.pk %}">Threads</a></li>
+        <li class="active">{{ cur_thread.title }}</li>
+    </ol>
+    <div class="container-fluid" style="z-index: 190; left: 0; position: absolute; width: 100%;
+    background: url({{ MEDIA_URL }}{{ cur_parent.logo.url }}); min-height: 100%">
+        <div class="container" style="font-size: 25px; height: 100%; background-color: white">
 
-     <div class="container-fluid" style="z-index: 190; left: 0; position: absolute; width: 100%;
-            background: url({{ MEDIA_URL }}{{ cur_parent.logo.url }}); min-height: 100%">
 
-
-       <div class="container" style="font-size: 25px; height: 100%; background-color: white">
-
-                <div align="center"> <b><br>{{ cur_thread.title }}<br><br></b></div>
-
-                {% for tag in cur_thread.parsed_tags.all %}
-                    <a class="btn btn-default"  href = "{% url 'search_tag' par=cur_parent.pk pk=tag.pk%}" role="button" style=" margin: 5px" >
-                                {{ tag.title }} <span class="badge" style="background-color: #aaaaaa">{{ tag.uses }}</span>
+            <div align="center">
+                <b><br>{{ cur_thread.title }}<br> <p id="counter" style="font-size: large; color: #609ab6"
+                >Loading...</p> <br></b>
+            </div>
+            {% for tag in cur_thread.parsed_tags.all %}
+                <a class="btn btn-default"  href = "{% url 'search_tag' par=cur_parent.pk pk=tag.pk%}"
+                   role="button" style=" margin: 5px" >
+                    {{ tag.title }}
+                    <span class="badge" style="background-color: #aaaaaa">
+                        {{ tag.uses }}
+                    </span>
                 </a>
+            {% endfor %}
+            <hr>
+            <div class="block" style="word-break: break-all;"> {{ cur_thread.text }}</div>
 
+            {% if cur_thread.image|length > 1%}
+                <br>
+                <a href = "{% url 'original' img=MEDIA_URL|add:cur_thread.image.url %}" target="_blank">
+                        <img align="center" style = "width: auto; max-width: 50%; height:auto"
+                        src = {{ MEDIA_URL }}{{ cur_thread.image.url }}>
+                </a>
+            {% endif %}
+            <hr style="height:3px;border:none;color:#c0c0c0;background-color:#c0c0c0; ">
 
-                {% endfor %}
-                       <hr>
-                <div class="block" style="word-break: break-all;"> {{ cur_thread.body }}</div>
-<hr style="height:3px;border:none;color:#c0c0c0;background-color:#c0c0c0; ">
-       <h1 align="center" style=" font-size: x-large" > Comments </h1>
-
-        <hr style="height:3px; width: 60%; border:none;color:#c0c0c0;background-color:#c0c0c0;">
-                {% for comment in comments %}
-                    <div align="right" style="font-size: small; color: #aaaaaa">
-                    {{ comment.time_posted|date:'Y-m-d H:i' }}
-                </div>
-                    <h1 style="font-size: large; word-break: break-all " >
-                                    {{ comment.text }}
-                    </h1>
-                 <hr style="height:1px;border:none;color:#999;background-color:#999;">
-
-                {% endfor %}
-
-            <div class="form-group" style="margin: 10px; width: 100%">
-                <form method="POST" type="text" class="" style="width: 60%; height: 30% ">
+            {% if user != 2 %}
+            <div class="form-group" style=" width: 100%; border: solid 1px black; padding: 10px">
+                <h1 align="center" style=" word-break: break-all; font-size: x-large " >
+                    Add comment
+                </h1>
+                <form  method="POST" type="text" enctype="multipart/form-data" style="width: 100%; height: 30%">
                     {% csrf_token %}
                     {% for field in form %}
-                        <div style="height: 20%"> {{ field }} </div>
+                        <div style="height: 20%; font-size: large">
+                            {{ field }}
+                        </div>
+
                     {% endfor %}
-                <br>
-                    <button type="submit" class="btn btn-default" style="background-color:#00cc99; position: relative; ">Add comment</button>
+                    <br>
+                    <button type="submit" class="btn btn-default" style="background-color:#00cc99;font-size: xx-large;
+        width: 100%">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                    </button>
                 </form>
             </div>
-{#       <form class="navbar-form navbar-left" role="search">#}
-{#           {% csrf_token %}<span class="glyphicon glyphicon-search" aria-hidden="true"></span> #}
+            {% endif %}
+{#            {% if  new_comments|length > 1%}#}
+{#                <h1 align="center" style=" font-size: xx-large" >#}
+{#                    {{ new_comments|length }} Comments#}
+{#                </h1>#}
+{#            {% else %}#}
+{#                {% if  new_comments|length == 1%}#}
+{#                    <h1 align="center" style=" font-size: xx-large" >#}
+{#                        1 Comment#}
+{#                    </h1>#}
+{#                {% else %}#}
+{#                    <h1 align="center" style=" font-size: xx-large" >#}
+{#                        No new_comments yet#}
+{#                    </h1>#}
+{#                {% endif %}#}
+{#            {% endif %}#}
 {##}
-{##}
-{#  <div class="form-group">#}
-{#    <input type="text" class="form-control" placeholder="Search">#}
-{#  </div>#}
-{#  <button type="submit" class="btn btn-default">Submit</button>#}
-{#</form>#}
-
-</div>
-
+{#            {% for comment in new_comments %}#}
+{#                <div style="background-color: #eaeaea; padding: 10px; margin: 10px">#}
+{#                    <div align="right" style="font-size: small; color: #aaaaaa">#}
+{#                        {{ comment.time_posted|date:'Y-m-d H:i' }}#}
+{#                    </div>#}
+{#                    {% if comment.image|length > 1%}#}
+{#                        <a href = "{% url 'original' img=MEDIA_URL|add:comment.image.url %}" target="_blank">#}
+{#                            <img align="center" style = "width: auto; max-width: 50%; height:auto"#}
+{#                            src = {{ MEDIA_URL }}{{ comment.image.url }}>#}
+{#                        </a>#}
+{#                    {% endif %}#}
+{#                    <h1 style="font-size: large; word-break: break-all " >#}
+{#                        {{ comment.text }}#}
+{#                    </h1>#}
+{#                    {% if user == 1 %}#}
+{#                        {{ comment.author_ip }}#}
+{#                    {% endif %}#}
+{#                </div>#}
+{#            {% endfor %}#}
+            <i id ="reload" class="fa fa-refresh" style="position: relative; left: 50%"></i>
+            <div id='here'> Loading... </div>
+        </div>
     </div>
 
 
-{% endblock content%}
+    <script>
 
+        $(document).ready(
+            function () {
+                $.fn.updateCounter = function (){
+                    $.getJSON("/api/counter.json?pk={{ cur_thread.pk }}").done(function(json){
+                        $("#counter").html(json["count"] + ' viewer(s)')
+                    });
+                };
+                $.fn.updateCounter();
+                setInterval(function() {
+                    $.fn.updateCounter();
+                }, 3000);
+                $.fn.reloadComments = function() {
+                    $.getJSON("/api/comments.json?pk={{ cur_thread.pk }}").done(
+                        function(response) {
+                            var comments = JSON.parse(response);
+                            $t = $("#here");
+                            $t.html("");
+                            if (comments.length > 1) {
+                                $t.append('<h1 align="center" style=" font-size: xx-large" >' +
+                                        comments.length + " Comments </h1>");
+                            } else {
+                                if (comments.length == 1) {
+                                    $t.append('<h1 align="center" style=" font-size: xx-large" >' +
+                                            1 + " Comment </h1>");
+                                } else {
+                                    $t.append('<h1 align="center" style=" font-size: xx-large" >No comments yet</h1>');
+
+                                }
+                            }
+                            for (var i = 0; i != comments.length; ++i) {
+                                var comment_body = '';
+                                if (comments[i].image) {
+                                    image_url = '/media/' + comments[i].image;
+                                    comment_body = '<div style="background-color: #eaeaea; padding: 10px; margin: 10px"> <div align="right" style="font-size: small; color: #aaaaaa">' + comments[i].time_posted + "</div>" + '<img align="center" style = "width: auto; max-width: 50%; height:auto" src =' + image_url + '>' + '<h1 style="font-size: large; word-break: break-all " >' + comments[i].text + '</h1></div>'
+
+                                } else {
+                                    comment_body = '<div style="background-color: #eaeaea; padding: 10px; margin: 10px"> <div align="right" style="font-size: small; color: #aaaaaa">' + comments[i].time_posted + "</div>" + '<h1 style="font-size: large; word-break: break-all " >' + comments[i].text + '</h1></div>'
+                                }
+                                $t.append(comment_body);
+                            }
+                        }
+                    );
+                };
+                $.fn.reloadComments();
+                $("#reload").click(function() {
+                    $.fn.reloadComments()
+                });
+            }
+        );
+
+    </script>
+
+{% endblock content%}
