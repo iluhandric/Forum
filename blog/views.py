@@ -202,7 +202,7 @@ def counter(request):
     ip_set = set()
     now = time.time()
     is_new = 1
-    count = cur_thread.users.count()
+    count = cur_thread.users.all().count()
     if cur_thread.users:
         for user in cur_thread.users.all():
             if user.ip == cur_ip:
