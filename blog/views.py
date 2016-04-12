@@ -206,12 +206,9 @@ def counter(request):
 
     for user in cur_thread.users.all():
         if user.ip == cur_ip:
-            if not is_new:
-                pass
-            else:
-                user.last_request = datetime.now()
-                user.save()
-               # is_new = False
+            user.last_request = datetime.now()
+            user.save()
+            is_new = False
         # else:
         #     if int(timezone.now) - int(user.last_request) > 10000000:
         #         cur_thread.users.filter(ip=cur_ip).delete()
