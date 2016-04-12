@@ -211,9 +211,7 @@ def counter(request):
             is_new = False
         else:
             if (datetime.now() - user.last_request).total_seconds() > 10:
-                cur_thread.users.filter(ip=cur_ip).delete()
                 user.delete()
-                cur_thread.save()
     if is_new:
         new_user = UserIp(ip=cur_ip, last_request=datetime.now())
         new_user.save()
