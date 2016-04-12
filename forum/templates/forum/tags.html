@@ -1,0 +1,38 @@
+ {% extends 'forum/discussions.html' %}
+<link rel="stylesheet" href="css/style.css">
+ {% block content %}
+     <ol class="breadcrumb" style="font-size: large">
+               <li ><a href="{% url 'view_topics'%}">Choose Topic</a></li>
+                <li><a href="{% url 'topic' pk=cur_topic.pk%}">{{cur_topic.title }}</a></li>
+                <li class="active">Tags</li>
+     </ol>
+
+     <div  class="container-fluid" style="z-index: 190; left: 0; position: absolute; width: 100%;
+            background: url({{ MEDIA_URL }}{{ cur_topic.logo.url }}); min-height: 100%;">
+        <div class="container" style="background-color: #fff; min-height: 100%;">
+            {% if tags%}
+
+
+            {% for tag in tags %}
+        
+                <a class="btn btn-default"  href = "{% url 'search_tag' par=cur_topic.pk pk=tag.pk%}" role="button" style="font-size: x-large; margin: 5px" >
+                                {{ tag.title }} <span class="badge" style="background-color: #aaaaaa">{{ tag.uses }}</span>
+                </a>
+        
+        
+            {% endfor %}
+                {% else %}
+                 <div align="center"><font class="topic-name" face ='Yu Gothic Light' size=150px style="
+                z-index: 1000; text-decoration: none !important; z-index: 1000;
+                text-underline: none; text-align: left; vertical-align: bottom; height: 100%; margin-top: 0;
+                position: relative ;">
+                            No tags yet.
+                        </font> </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+
+{% endblock content%}
+

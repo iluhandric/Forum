@@ -1,0 +1,79 @@
+{% extends 'forum/discussions.html' %}
+<link rel="stylesheet" href="css/style.css">
+{% block content %}
+    <ol class="breadcrumb" style="font-size: large">
+        <li><a href="{% url 'view_topics'%}">Choose Topic</a></li>
+        <li > <a href="{% url 'topic' pk=cur_parent.pk %}">{{ cur_parent.title }}</a></li>
+        <li > <a href="{% url 'threads' pk=cur_parent.pk %}">Threads</a></li>
+        <li class="active">{{ cur_thread.title }}</li>
+    </ol>
+    <div class="container-fluid" style="z-index: 190; left: 0; position: absolute; width: 100%;
+    background: url({{ MEDIA_URL }}{{ cur_parent.logo.url }}); min-height: 100%">
+        <div class="container" style="font-size: 25px; height: 100%; background-color: white">
+            <div align="center">
+                <b>
+                    <br>{{ cur_thread.title }}<br>
+                        <p id="counter" style="font-size: large; color: #609ab6">
+                            Loading...
+                        </p>
+                </b>
+            </div>
+            <div class="container-fluid" style="background-color: #eaeaea; padding: 20px; align-content: center">
+                {% for tag in cur_thread.parsed_tags.all %}
+                    <a class="btn btn-default"  href = "{% url 'search_tag' par=cur_parent.pk pk=tag.pk%}"
+                       role="button" style=" margin: 5px" >
+                        {{ tag.title }}
+                        <span class="badge" style="background-color: #aaaaaa">
+                            {{ tag.uses }}
+                        </span>
+                    </a>
+                {% endfor %}
+                <hr>
+                <div style="word-break: break-all;">
+                    {{ cur_thread.text }}
+                </div>
+
+                {% if cur_thread.image|length > 1%}
+                    <br>
+                        <div class="container-fluid" align="center" style="width: 100%">
+                        <img align="center" style = "width: auto; max-width: 50%; height: auto"
+                        src = {{ MEDIA_URL }}{{ cur_thread.image.url }}>
+                    </div>
+                {% endif %}
+                </div>
+                <hr style="height:3px;border:none;color:#c0c0c0;background-color:#c0c0c0; ">
+
+                <div class="form-group" style=" width: 100%; border: solid 1px black; padding: 10px">
+                    <h1 align="center" style=" word-break: break-all; font-size: x-large " >
+                        Add comment
+                    </h1>
+                    <form  method="POST" type="text" enctype="multipart/form-data" style="width: 100%; height: 30%">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div style="height: 20%; font-size: large">
+                                {{ field }}
+                            </div>
+
+                        {% endfor %}
+                        <br>
+                        <button type="submit" class="btn btn-default" style="background-color:#00cc99;font-size: xx-large;
+            width: 100%">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </form>
+                </div>
+
+            <i id ="reload" class="fa fa-refresh" style="position: relative; left: 50%"></i>
+            <div id='here'> Loading... </div>
+        </div>
+    </div>
+    <script>
+        var pk = {{ cur_thread.pk }};
+    </script>
+    <script src = '/static/thread.js'></script>
+
+{% endblock content%}
+{#                        <a href = "{% url 'original' img=MEDIA_URL|add:comment.image.url %}" target="_blank">#}
+{#                            <img align="center" style = "width: auto; max-width: 50%; height:auto"#}
+{#                            src = {{ MEDIA_URL }}{{ comment.image.url }}>#}
+{#                        </a>#}

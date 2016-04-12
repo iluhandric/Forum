@@ -1,0 +1,51 @@
+ {% extends 'forum/discussions.html' %}
+<link rel="stylesheet" href="css/style.css">
+ {% block content %}
+     <ol class="breadcrumb" style="font-size: large">
+        <li ><a href="{% url 'view_topics'%}">Choose Topic</a></li>
+        <li><a href="{% url 'topic' pk=cur_topic.pk%}">{{cur_topic.title }}</a></li>
+        <li class="active">Treads</li>
+     </ol>
+
+     <div class="container-fluid" style="z-index: 190; left: 0; position: absolute; width: 100%;
+            background: url({{ MEDIA_URL }}{{ cur_topic.logo.url }});min-height: 100% ">
+
+       <div class="container" style="background-color: #ffffff; height: 100%" >
+           <ul class="list-group">
+           {% if threads %}
+           {% for thread in threads %}
+
+                <a class="list-group-item" href="{% url 'thread'  par=cur_topic.pk pk=thread.pk%}" role="button" style="font-size: x-large; margin: 5px" >
+                                {{ thread.title|linebreaks }}
+                </a>
+
+
+            {% endfor %}
+           {% else %}
+                <div align="center"><font class="topic-name"  face ='Yu Gothic Light' size=150px style="
+                z-index: 1000; text-decoration: none !important; z-index: 1000;
+                text-underline: none; text-align: center; vertical-align: bottom; height: 100%; margin-top: 0;
+                position: relative ;">
+                            No threads yet.
+                        </font>
+                </div>
+           </ul>
+       {% endif %}
+       <hr>
+           <div class="form-group" style=" width: 100%; border: solid 1px black; padding: 10px">
+                 <h1 align="center" style=" word-break: break-all " >
+                       Add new
+                    </h1>
+            <form method="POST" type="text" class="form" enctype="multipart/form-data" style="width: 100%; ">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-default" style="background-color:#00cc99; position: relative; ">Add thread</button>
+            </form>
+           </div>
+</div>
+
+    </div>
+
+
+{% endblock content%}
+

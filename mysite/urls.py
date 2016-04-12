@@ -1,4 +1,4 @@
-"""mysite URL Configuration
+"""site URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.9/topics/http/urls/
@@ -11,7 +11,7 @@ Class-based views
     2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
 Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
-    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
+    2. Add a URL to urlpatterns:  url(r'^forum/', include('forum.urls'))
 """
 
 from django.conf.urls import url
@@ -23,7 +23,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^administrationturlthatnoonecanguess/', include(admin.site.urls)),
-    url(r'', include('blog.urls')),
+    url(r'', include('forum.urls')),
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT})
     #url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
    #     {'document_root': settings.MEDIA_ROOT}),

@@ -1,0 +1,24 @@
+ {% extends 'forum/home_page.html' %}
+
+
+ {% block content %}
+        <head>
+            <title>Imageboard</title>
+        </head>
+        <body style="z-index: 10">
+            <div class="header" style="text-align: left; margin-top: 60px; ">
+                <h1 align="left" style=" display: flex; ">
+                    <a style = "color : #000;background-color: #00cc99; padding: 10px" href="/">Discussions</a>
+                </h1>
+            </div>
+            <div class="content container">
+                <div class="col-md-16">
+                    {% block posts %}
+                    {% endblock posts%}
+                    {% block new_form %}
+                    {% endblock new_form%}
+                </div>
+            </div>
+        </body>
+{% endblock content%}
+

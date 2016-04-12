@@ -39,7 +39,7 @@
 
 URLS.PY
 
-    url(r'^blog/post/(?P<pk>[0-9]+)/edit/$', views.post_edit, name='post_edit'),
+    url(r'^forum/post/(?P<pk>[0-9]+)/edit/$', views.post_edit, name='post_edit'),
     url(r'^topic/(?P<pk>[0-9]+)/$', views.topic, name='topic'),
     url(r'^thread/(?P<pk>[0-9]+)/$', views.thread, name='thread')]
     
@@ -58,9 +58,9 @@ VIEWS.PY:
             thread.save()
             thread.parent = pk
             cur_topic.threads.add(thread)
-            return redirect('blog.views.topic', pk=pk)
+            return redirect('forum.views.topic', pk=pk)
     form = ThreadForm()
-    return render(request, 'blog/topic.html', {'cur_topic': cur_topic, 'threads':threads, 'form': form})
+    return render(request, 'forum/topic.html', {'cur_topic': cur_topic, 'threads':threads, 'form': form})
     
 После сказанного, все это было подключено к templates для контекстного отображения на страницах.
 
