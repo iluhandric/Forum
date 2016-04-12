@@ -203,25 +203,24 @@ def counter(request):
     ip_set = set()
     now = time.time()
     is_new = 1
-    count = 0
 
-    for user in cur_thread.users.all():
-        if user.ip == cur_ip:
-            if not is_new:
-                user.delete()
-            else:
-                user.last_request = datetime.now()
-                is_new = False
-        else:
-            if int(timezone.now) - int(user.last_request) > 10000000:
-                cur_thread.users.filter(ip=cur_ip).delete()
-                user.delete()
-                cur_thread.save()
-    if is_new:
-        new_user = UserIp(ip=cur_ip, last_request=datetime.now())
-        new_user.save()
-        cur_thread.users.add(new_user)
-        cur_thread.save()
+    # for user in cur_thread.users.all():
+    #     if user.ip == cur_ip:
+    #         if not is_new:
+    #             user.delete()
+    #         else:
+    #             user.last_request = datetime.now()
+    #             is_new = False
+    #     # else:
+    #     #     if int(timezone.now) - int(user.last_request) > 10000000:
+    #     #         cur_thread.users.filter(ip=cur_ip).delete()
+    #     #         user.delete()
+    #     #         cur_thread.save()
+    # if is_new:
+    #     new_user = UserIp(ip=cur_ip, last_request=datetime.now())
+    #     new_user.save()
+    #     cur_thread.users.add(new_user)
+    #     cur_thread.save()
 
     count = len(cur_thread.users.all())
     data = dict()
