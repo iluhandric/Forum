@@ -175,6 +175,7 @@ def home_page(request):
      return render(request, 'blog/home_page.html')
 
 
+
 def comment_remove(request, par, pk, comment_pk):
      comment = get_object_or_404(Comment, pk=comment_pk)
      comment.remove()
@@ -202,8 +203,8 @@ def counter(request):
     ip_set = set()
     now = time.time()
     is_new = 1
-    count = 0
-    for user in cur_thread.users.all():
+    count = len(cur_thread.users.all())
+   # for user in cur_thread.users.all():
         # if user.ip == cur_ip:
         #     user.last_request = datetime.now()
         #     is_new = False
@@ -214,7 +215,7 @@ def counter(request):
         #         cur_thread.save()
         #         count -= 1
         #     else:
-            count += 1
+      #      count += 1
     # if is_new:
     #     new_user = UserIp(ip=cur_ip, last_request=datetime.now())
     #     new_user.save()
