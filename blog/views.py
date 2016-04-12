@@ -209,14 +209,16 @@ def counter(request):
                 user.last_request = datetime.now()
                 is_new = False
             else:
-                if int(timezone.now) - int(user.last_request) > 3:
-                    ip_set.remove(user.ip)
+                if int(timezone.now) - int(user.last_request) > 1000:
+                    cur_thread.users.filter(ip=cur_ip).delete()
                     user.delete()
+                    cur_thread.save()
                     count -= 1
     if is_new:
         new_user = UserIp(ip=cur_ip, last_request=datetime.now())
         new_user.save()
         cur_thread.users.add(new_user)
+        cur_thread.save()
         count += 1
     data = dict()
     data["count"] = count
