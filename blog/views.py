@@ -21,6 +21,7 @@ from rest_framework.views import APIView
 from django.forms.models import model_to_dict
 
 
+
 from django.core import serializers
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -47,17 +48,17 @@ def block_user(request):
     block = BlockUser()
     return render(request, 'blog/block_user.html', {'blocka': block, 'user':user})
 
-def admin_login(request):
-    form = PassForm(request.POST)
-    admin = Admin.objects.get()
-
-    if form.is_valid():
-        if form.cleaned_data['password'] == admin.password:
-            print(admin.password)
-            admin.cur_ip = get_client_ip(request)
-            return redirect('blog.views.home_page')
-    form = PassForm()
-    return render(request, 'blog/admin_login.html', {'form': form})
+# def admin_login(request):
+#     form = PassForm(request.POST)
+#     admin = Admin.objects.get()
+#
+#     if form.is_valid():
+#         if form.cleaned_data['password'] == admin.password:
+#             print(admin.password)
+#             admin.cur_ip = get_client_ip(request)
+#             return redirect('blog.views.home_page')
+#     form = PassForm()
+#     return render(request, 'blog/admin_login.html', {'form': form})
 
 
 def handler404(request):
@@ -95,27 +96,25 @@ def tags(request, pk):
     return render(request, 'blog/tags.html', {'cur_topic': cur_topic, 'tags': tags})
 
 
+def is_blocked(request):
+    user_ip = get_client_ip(request)
+    try:
+        is_blocked = Blocked.objects.get(address=user_ip)
+        return True
+    except Blocked.DoesNotExist:
+        return False
+    except Blocked.MultipleObjectsReturned:
+        return True
+
 def image_original(request, img):
     print(img)
     return render(request, 'blog/original.html', {'image': img})
 
 def thread(request, par, pk):
     cur_thread = get_object_or_404(Thread, pk=pk)
-
     form = CommentForm(request.POST, request.FILES)
-    state = 0
-    user_ip = get_client_ip(request)
-    if user_ip == Admin.objects.get().cur_ip:
-        state = 1
-    try:
-        is_blocked = Blocked.objects.get(address=user_ip)
-        state = 2
-    except Blocked.DoesNotExist:
-        pass
-    except Blocked.MultipleObjectsReturned:
-        state = 2
     print(cur_thread.parent)
-    if form.is_valid():
+    if form.is_valid() and not is_blocked(request):
         comment = form.save(commit=False)
         comment.parent = pk
         comment.time_posted = timezone.now()
@@ -127,14 +126,14 @@ def thread(request, par, pk):
     comments = cur_thread.comments.all().order_by('-time_posted')
     cp = get_object_or_404(Topic, pk=cur_thread.parent)
     return render(request, 'blog/thread.html', {'cur_thread': cur_thread, 'comments':comments, 'form': form,
-                                                'cur_parent': cp, 'user': state })
+                                                'cur_parent': cp})
 
 
 def threads(request, pk):
     cur_topic = get_object_or_404(Topic, pk=pk)
     threads = cur_topic.threads.all().order_by('-time_posted')
     form = ThreadForm(request.POST, request.FILES)
-    if form.is_valid():
+    if form.is_valid() and not is_blocked(request):
         thread = form.save(commit=False)
         try:
             Thread.objects.get(parent=pk, title=thread.title)
@@ -197,11 +196,8 @@ def comment_edit(request, pk):
 
 def counter(request):
     pk = request.GET["pk"]
-
     cur_ip = get_client_ip(request)
-
     cur_thread = Thread.objects.get(pk=pk)
-
     ip_set = set()
     now = time.time()
     is_new = 1
@@ -215,64 +211,57 @@ def counter(request):
                 if int(time.time()) - int(user.last_request) > 3:
                     ip_set.remove(user.ip)
                     user.delete()
-
     if is_new:
         new_user = UserIp(ip=cur_ip, last_request=now)
         ip_set.add(new_user.pk)
-
     cur_thread.users = json.dumps(list(ip_set))
-
     count = len(list(ip_set))
     data = dict()
     data["count"] = count
-
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 
-
-    #permission_classes = (AllowAny,)
 @api_view(['GET', 'POST'])
 def get_comments(request):
-    thread_pk = request.GET["pk"]
-    cur_thread = Thread.objects.get(pk=thread_pk)
-    comments = cur_thread.comments.all().order_by('-time_posted')
- #   serializer = CommentSerializer()
-   # data = CommentSerializer(json, comments, many=True)
-    data = []
-    for com in comments:
-        new_obj = model_to_dict(com)
-        for field in new_obj:
-            # if field == 'image':
-            #     new_obj[field] = new_obj[field].url
-            if field == 'time_posted':
-                new_obj[field] = new_obj[field].strftime("%Y/%m/%d %H:%M:%S")
-            if field and field != 'time_posted':
-                new_obj[field] = str(new_obj[field])
-
-        data.append(new_obj)
-   # data = dict()
-#    data["pisa"] = "pisa pisa"
-    return Response(json.dumps(data), content_type='application/json')
-
-class CommentList(APIView):
-    def get(self, request, format=None):
+    if not is_blocked(request):
         thread_pk = request.GET["pk"]
         cur_thread = Thread.objects.get(pk=thread_pk)
         comments = cur_thread.comments.all().order_by('-time_posted')
-        serializer = CommentSerializer(comments, many=True)
-        return HttpResponse(json.dumps(serializer.data), content_type='application/json')
+        data = []
+        for com in comments:
+            new_obj = model_to_dict(com)
+            for field in new_obj:
+                if field == 'time_posted':
+                    new_obj[field] = new_obj[field].strftime("%Y/%m/%d %H:%M:%S")
+                if field and field != 'time_posted':
+                    new_obj[field] = str(new_obj[field])
 
-    def post(self, request, format=None):
-        serializer = CommentSerializer(data=request.DATA)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            data.append(new_obj)
+    else:
+        data = [{'text' : 'YOU ARE BLOCKED AND CANNOT VIEW COMMENTS', 'time_posted': ''}]
+    return Response(json.dumps(data), content_type='application/json')
 
-    def delete(self, request, pk, format=None):
-        comment = self.get_object(pk)
-        comment.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+
+#
+# class CommentList(APIView):
+#     def get(self, request, format=None):
+#         thread_pk = request.GET["pk"]
+#         cur_thread = Thread.objects.get(pk=thread_pk)
+#         comments = cur_thread.comments.all().order_by('-time_posted')
+#         serializer = CommentSerializer(comments, many=True)
+#         return HttpResponse(json.dumps(serializer.data), content_type='application/json')
+#
+#     def post(self, request, format=None):
+#         serializer = CommentSerializer(data=request.DATA)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#     def delete(self, request, pk, format=None):
+#         comment = self.get_object(pk)
+#         comment.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
 #
 # def post_list(request):
 #     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')

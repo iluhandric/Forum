@@ -13,8 +13,8 @@ class ThreadForm(forms.ModelForm):
         model = Thread
         fields = ('title', 'tags', 'text', 'image',)
         widgets = {
-           'text': forms.Textarea(attrs={'style': 'height: 100px; width: 20%; max-width : 30%'}),
-            'title': forms.Textarea(attrs={'rows': 1, 'cols': 50,}),
+           'text': forms.Textarea(attrs={'style': 'height: 100px; width: 40%; max-width : 100%'}),
+            'title': forms.Textarea(attrs={'style': 'height: 20px; width: 40%; max-width : 100%'}),
             # 'image': forms.ImageField()
         }
 

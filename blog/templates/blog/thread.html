@@ -118,7 +118,7 @@
                 $.fn.updateCounter();
                 setInterval(function() {
                     $.fn.updateCounter();
-                }, 3000);
+                }, 1000);
                 $.fn.reloadComments = function() {
                     $.getJSON("/api/comments.json?pk={{ cur_thread.pk }}").done(
                         function(response) {

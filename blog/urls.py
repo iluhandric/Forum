@@ -2,6 +2,8 @@ from django.conf.urls import include, url
 from . import views
 from django.conf.urls import patterns, url, include
 #import ..mysite.settings as settings
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 
@@ -22,10 +24,10 @@ urlpatterns = [
     url(r'^topics/(?P<pk>[0-9]+)/threads$', views.threads, name='threads'),
     url(r'^topics/(?P<par>[0-9]+)/search/(?P<pk>[0-9]+)$', views.search_tag, name='search_tag'),
     url(r'^topics/(?P<par>[0-9]+)/threads/(?P<pk>[0-9]+)$', views.thread, name='thread'),
-    url(r'^admin_entering', views.admin_login, name='admin_login'),
-    url(r'^block_user', views.block_user, name='block_user'),
+ #   url(r'^admin_entering', views.admin_login, name='admin_login'),
+#    url(r'^block_user', views.block_user, name='block_user'),
     url(r'^resources(?P<img>.*)$', views.image_original, name='original'),
     url(r'^api/counter\.json', views.counter),
     url(r'^api/comments\.json', views.get_comments),
-]
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
