@@ -223,7 +223,7 @@ def counter(request):
 
 @api_view(['GET', 'POST'])
 def get_comments(request):
-    if False: #is_blocked(request):
+    if not is_blocked(request):
         thread_pk = request.GET["pk"]
         cur_thread = Thread.objects.get(pk=thread_pk)
         comments = cur_thread.comments.all().order_by('-time_posted')
