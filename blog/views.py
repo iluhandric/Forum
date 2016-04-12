@@ -197,31 +197,33 @@ def comment_edit(request, pk):
 
 
 def counter(request):
-    pk = request.GET["pk"]
+    thread_pk = request.GET["pk"]
     cur_ip = get_client_ip(request)
-    cur_thread = Thread.objects.get(pk=pk)
+    cur_thread = Thread.objects.get(pk=thread_pk)
     ip_set = set()
     now = time.time()
     is_new = 1
+    count = 0
+
+    for user in cur_thread.users.all():
+        if user.ip == cur_ip:
+            if not is_new:
+                user.delete()
+            else:
+                user.last_request = datetime.now()
+                is_new = False
+        else:
+            if int(timezone.now) - int(user.last_request) > 10000000:
+                cur_thread.users.filter(ip=cur_ip).delete()
+                user.delete()
+                cur_thread.save()
+    if is_new:
+        new_user = UserIp(ip=cur_ip, last_request=datetime.now())
+        new_user.save()
+        cur_thread.users.add(new_user)
+        cur_thread.save()
+
     count = len(cur_thread.users.all())
-   # for user in cur_thread.users.all():
-        # if user.ip == cur_ip:
-        #     user.last_request = datetime.now()
-        #     is_new = False
-        # else:
-        #     if int(timezone.now) - int(user.last_request) > 10000000:
-        #         cur_thread.users.filter(ip=cur_ip).delete()
-        #         user.delete()
-        #         cur_thread.save()
-        #         count -= 1
-        #     else:
-      #      count += 1
-    # if is_new:
-    #     new_user = UserIp(ip=cur_ip, last_request=datetime.now())
-    #     new_user.save()
-    #     cur_thread.users.add(new_user)
-    #     cur_thread.save()
-    #     count += 1
     data = dict()
     data["count"] = count
     return HttpResponse(json.dumps(data), content_type='application/json')
