@@ -30,7 +30,6 @@ class Blocked(models.Model):
     address = models.CharField(max_length=100, default='u')
 
 
-
 class Admin(models.Model):
     cur_ip = models.CharField(max_length=100, default='127.0.0.1')
     password = models.CharField(max_length=100, default='password')
@@ -80,7 +79,7 @@ class Comment(models.Model):
 
 class UserIp(models.Model):
     ip = models.CharField(max_length=100, default='unknown')
-    last_request = models.DateTimeField(default=timezone.now)
+    last_request = models.DateTimeField(default=None)
     def __str__(self):
         return self.ip
 
@@ -93,7 +92,7 @@ class Thread(models.Model):
     parsed_tags = models.ManyToManyField(Tag, blank=True)
     time_posted = models.DateTimeField(default=timezone.now)
     image = models.ImageField(upload_to=get_unique_path, blank=True)
-    users = models.TextField(blank=True)
+    users = models.ManyToManyField(UserIp, blank=True)
 
     def __str__(self):
         return self.title

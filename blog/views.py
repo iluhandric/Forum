@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.shortcuts import render
 from django.utils import timezone
 from .models import *
+from datetime import *
 from .forms import *
 from .serializers import *
 from django.shortcuts import render, get_object_or_404
@@ -201,21 +202,22 @@ def counter(request):
     ip_set = set()
     now = time.time()
     is_new = 1
+    count = cur_thread.users.count()
     if cur_thread.users:
-        for user_pk in json.loads(cur_thread.users):
-            user = UserIp.objects.get(pk=user_pk)
+        for user in cur_thread.users.all():
             if user.ip == cur_ip:
-                user.last_request = now
-                is_new = 0
+                user.last_request = datetime.now()
+                is_new = False
             else:
-                if int(time.time()) - int(user.last_request) > 3:
+                if int(timezone.now) - int(user.last_request) > 3:
                     ip_set.remove(user.ip)
                     user.delete()
+                    count -= 1
     if is_new:
-        new_user = UserIp(ip=cur_ip, last_request=now)
-        ip_set.add(new_user.pk)
-    cur_thread.users = json.dumps(list(ip_set))
-    count = len(list(ip_set))
+        new_user = UserIp(ip=cur_ip, last_request=datetime.now())
+        new_user.save()
+        cur_thread.users.add(new_user)
+        count += 1
     data = dict()
     data["count"] = count
     return HttpResponse(json.dumps(data), content_type='application/json')
@@ -238,7 +240,7 @@ def get_comments(request):
 
             data.append(new_obj)
     else:
-        data = [{'text' : 'YOU ARE BLOCKED AND CANNOT VIEW COMMENTS', 'time_posted': ''}]
+        data = [{'text' : 'YOU ARE BLOCKED AND NOT ALLOWED TO VIEW OR POST ANYTHING', 'time_posted': ''}]
     return Response(json.dumps(data), content_type='application/json')
 
 
