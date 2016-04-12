@@ -209,11 +209,11 @@ def counter(request):
             user.last_request = datetime.now()
             user.save()
             is_new = False
-        # else:
-        #     if int(timezone.now) - int(user.last_request) > 10000000:
-        #         cur_thread.users.filter(ip=cur_ip).delete()
-        #         user.delete()
-        #         cur_thread.save()
+        else:
+            if (datetime.now() - user.last_request).total_seconds() > 10:
+                cur_thread.users.filter(ip=cur_ip).delete()
+                user.delete()
+                cur_thread.save()
     if is_new:
         new_user = UserIp(ip=cur_ip, last_request=datetime.now())
         new_user.save()
@@ -221,7 +221,7 @@ def counter(request):
         cur_thread.save()
 
     count = len(cur_thread.users.all())
-    print(cur_thread.users.all())
+   # print(cur_thread.users.all())
     data = dict()
     data["count"] = count
     return HttpResponse(json.dumps(data), content_type='application/json')
