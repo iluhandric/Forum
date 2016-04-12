@@ -6,6 +6,7 @@ from django.utils import timezone
 from .models import *
 from datetime import *
 from .forms import *
+from django.utils import timezone
 from .serializers import *
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
@@ -206,14 +207,14 @@ def counter(request):
 
     for user in cur_thread.users.all():
         if user.ip == cur_ip:
-            user.last_request = datetime.now()
+            user.last_request = timezone.now()
             user.save()
             is_new = False
         else:
-            if (datetime.now() - user.last_request).total_seconds() > 10:
+            if (timezone.now() - user.last_request).total_seconds() > 10:
                 user.delete()
     if is_new:
-        new_user = UserIp(ip=cur_ip, last_request=datetime.now())
+        new_user = UserIp(ip=cur_ip, last_request=timezone.now())
         new_user.save()
         cur_thread.users.add(new_user)
         cur_thread.save()
