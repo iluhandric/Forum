@@ -14,12 +14,13 @@
 
 
             {% for tag in tags %}
-        
-                <a class="btn btn-default"  href = "{% url 'search_tag' par=cur_topic.pk pk=tag.pk%}" role="button" style="font-size: x-large; margin: 5px" >
+
+                <a class="btn btn-default"  href = "{% url 'search_tag' par=cur_topic.pk pk=tag.pk%}" role="button"
+                   style="font-size: x-large; margin: 5px;border-radius: 1px" >
                                 {{ tag.title }} <span class="badge" style="background-color: #aaaaaa">{{ tag.uses }}</span>
                 </a>
-        
-        
+
+
             {% endfor %}
                 {% else %}
                  <div align="center"><font class="topic-name" face ='Yu Gothic Light' size=150px style="

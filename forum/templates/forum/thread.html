@@ -91,7 +91,8 @@
 
                                 {% if field.name == 'text' %}
                                      <div style=" width: 100%">{{ field }} </div>
-                                    <button type="submit" class="button" style="margin:8px; height: 20px; color: #000; float: right;  background-color:#fff; font-size: auto;">
+                                    <button type="submit" class="button" style="margin:8px; height: 20px; color: #000;
+                                    float: right;  background-color:#fff;">
 
                             <i class="fa fa-send"></i>
                         </button>
@@ -118,9 +119,20 @@
                 </div>
         <br>
             <i id ="reload" class="fa fa-refresh" style="position: relative; left: 50%"></i>
-            <div id='here'> Loading... </div>
+            <br>
+            <div id="older-div-top" style="float: right"></div>
+            <div id="newer-div-top" style="float:left"></div>
+            <br>
+            <div id='comments-settion'> Loading... </div>
+            <br>
+            <div id="older-div-bottom" style="float: right"></div>
+            <div id="newer-div-bottom" style="float:left"></div>
+        <br>
+        <br>
         </div>
+
     </div>
+</div>
     <script>
         var pk = {{ cur_thread.pk }};
     </script>
