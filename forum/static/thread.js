@@ -52,12 +52,15 @@ $(document).ready(
                             }
                             for (var i = 10*current_page; i != Math.min(comments.length, 10*(current_page+1)); ++i) {
                                 var comment_body = '';
+                                var text = comments[i].text;
+                                text = text.replace('<', '&lt;').replace('>', '&gt;');
                                 if (comments[i].image > '0') {
                                     image_url = '/media/' + comments[i].image;
-                                    comment_body = '<div style="background-color: #eaeaea; padding: 10px; margin: 10px"> <div align="right" style="font-size: x-small; color: #aaaaaa">' + comments[i].time_posted + "</div>" + '<img align="center" style = "width: auto; max-width: 50%; height:auto" src =' + image_url + '>' + '<h1 style="font-size: medium; word-break: break-all " >' + comments[i].text + '</h1></div>'
+                                    comment_body = '<div style="background-color: #eaeaea; padding: 10px; margin: 10px"> <div align="right" style="font-size: x-small; color: #aaaaaa">' + comments[i].time_posted + "</div>" + '<img align="center" style = "width: auto; max-width: 50%; height:auto" src =' + image_url + '>' + '<h1 style="font-size: medium; word-break: break-all " >' + text + '</h1></div>'
 
                                 } else {
-                                    comment_body = '<div style="background-color: #eaeaea; padding: 10px; margin: 10px"> <div align="right" style="font-size: x-small; color: #aaaaaa">' + comments[i].time_posted + "</div>" + '<h1 style="font-size: medium; word-break: break-all " >' + comments[i].text + '</h1></div>'
+
+                                    comment_body = '<div style="background-color: #eaeaea; padding: 10px; margin: 10px"> <div align="right" style="font-size: x-small; color: #aaaaaa">' + comments[i].time_posted + "</div>" + '<h1 style="font-size: medium; word-break: break-all " >' + text + '</h1></div>'
                                 }
                                 $t.append(comment_body);
                             }
