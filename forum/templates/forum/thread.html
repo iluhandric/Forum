@@ -38,6 +38,7 @@
     </ol>
     <div class="container-fluid" style="z-index: 190; left: 0; position: absolute; width: 100%;
     background: url({{ MEDIA_URL }}{{ cur_parent.logo.url }}); min-height: 100%">
+
         <div class="container-fluid" style="font-size: 25px; min-height: 100%; background-color: white; width: 60%;
         min-width: 300px; padding: 0 20px">
 
@@ -92,17 +93,17 @@
                                 {% if field.name == 'text' %}
                                      <div style=" width: 100%">{{ field }} </div>
                                     <button type="submit" class="button" style="margin:8px; height: 20px; color: #000;
-                                    float: right;  background-color:#fff;">
+                                    float: right; background-color: white">
 
-                            <i class="fa fa-send"></i>
+                            <i class="fa fa-send" style="font-size: 15px"></i>
                         </button>
 
                                 {% else %}
-                                    <div  style="float: right; vertical-align: top; margin:8px;
+                                    <div  style="float: right; vertical-align: top; margin-top:8px;
                                     height:20px; width: 20px;
                                     background-image:
                                     url(https://help.blackberry.com/en/priv/current/help/mba1423752627561_lowres_en-us.png);
-                                    background-size: 20px; opacity: 1">
+                                    background-size: 20px; opacity: 1; overflow: hidden">
                                          {{ field }}
                                     </div>
 
@@ -120,13 +121,13 @@
         <br>
             <i id ="reload" class="fa fa-refresh" style="position: relative; left: 50%"></i>
             <br>
-            <div id="older-div-top" style="float: right"></div>
-            <div id="newer-div-top" style="float:left"></div>
+            <div id="older-div-top" style="float: right; font-size: 19px"></div>
+            <div id="newer-div-top" style="float: left; font-size: 19px"></div>
             <br>
             <div id='comments-settion'> Loading... </div>
             <br>
-            <div id="older-div-bottom" style="float: right"></div>
-            <div id="newer-div-bottom" style="float:left"></div>
+            <div id="older-div-bottom" style="float: right; font-size: 19px"></div>
+            <div id="newer-div-bottom" style="float: left; font-size: 19px"></div>
         <br>
         <br>
         </div>
