@@ -48,11 +48,11 @@ class UserIp(models.Model):  # The model used to check user connection to the th
 
 
 class Thread(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=60)
     text = models.TextField(blank=True, max_length=500)
     parent = models.BigIntegerField(blank=False)
     comments = models.ManyToManyField(Comment, blank=True)
-    tags = models.CharField(max_length=200, blank=True)
+    tags = models.CharField(max_length=100, blank=True)
     parsed_tags = models.ManyToManyField(Tag, blank=True)
     time_posted = models.DateTimeField(default=timezone.now)
     image = models.ImageField(upload_to=get_unique_path, blank=True)

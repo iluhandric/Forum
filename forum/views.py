@@ -12,55 +12,6 @@ from django.forms.models import model_to_dict
 def get_template(name):
     return 'forum/' + name + '.html'
 
-
-def get_client_ip(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip
-
-"""
-def handler404(request):
-    response = render_to_response('404'), {},
-                                  context_instance=RequestContext(request))
-    response.status_code = 404
-    return response
-"""
-
-
-def index(request):
-    return render(request, get_template("index"))
-
-
-def ask(request):
-    return render(request, get_template('ask'))
-
-
-def search_tag(request, par, pk):
-    cur_topic = get_object_or_404(Topic, pk=par)
-    tag = Tag.objects.get(pk=pk)
-    all_threads = cur_topic.threads.all().order_by('-time_posted')
-    returned_threads = []
-    for t in all_threads:
-        if tag.title in t.tags:
-            returned_threads.append(t)
-
-    return render(request, get_template('tag_results'), {'cur_topic': cur_topic, 'threads': returned_threads, 'cur_tag': tag})
-
-
-def view_topics(request):
-    topics = Topic.objects.filter()
-    return render(request, get_template('topics'), {'topics': topics})
-
-
-def tags(request, pk):
-    cur_topic = get_object_or_404(Topic, pk=pk)
-    tags = Tag.objects.filter(parent=pk).order_by('-uses')  # Or = cur_topic.tags.all
-    return render(request, get_template('tags'), {'cur_topic': cur_topic, 'tags': tags})
-
-
 def is_blocked(request):
     user_ip = get_client_ip(request)
     try:
@@ -71,29 +22,10 @@ def is_blocked(request):
     except Blocked.MultipleObjectsReturned:
         return True
 
-
-def thread(request, par, pk):
-    cur_thread = get_object_or_404(Thread, pk=pk)
-    form = CommentForm(request.POST, request.FILES)
-    print(cur_thread.parent)
-    if form.is_valid() and not is_blocked(request):
-        comment = form.save(commit=False)
-        comment.parent = pk
-        comment.time_posted = timezone.now()
-        comment.author_ip = get_client_ip(request)
-        comment.save()
-        cur_thread.comments.add(comment)
-        return redirect('forum.views.thread', par=par, pk=pk)
-    form = CommentForm()
-    comments = cur_thread.comments.all().order_by('-time_posted')
-    cp = get_object_or_404(Topic, pk=cur_thread.parent)
-    return render(request, get_template('thread'), {'cur_thread': cur_thread, 'comments': comments, 'form': form,
-                                                    'cur_parent': cp})
-
-
-def threads(request, pk):
+def new_thread(request, pk):
+    if is_blocked(request):
+       return render(request, get_template('blocked'))
     cur_topic = get_object_or_404(Topic, pk=pk)
-    threads_in_topic = cur_topic.threads.all().order_by('-time_posted')
     form = ThreadForm(request.POST, request.FILES)
     if form.is_valid() and not is_blocked(request):
         new_thread = form.save(commit=False)
@@ -120,21 +52,117 @@ def threads(request, pk):
             new_thread.parent = pk
 
             cur_topic.threads.add(new_thread)
-            return redirect('forum.views.threads', pk=pk)
+            return redirect('forum.views.thread', par=pk, pk=new_thread.pk)
     form = ThreadForm()
-    return render(request, get_template('threads'), {'cur_topic': cur_topic, 'threads': threads_in_topic, 'form': form})
+    return render(request,  get_template('new_thread'), {'cur_topic':cur_topic,'form':form})
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+"""
+def handler404(request):
+    response = render_to_response('404'), {},
+                                  context_instance=RequestContext(request))
+    response.status_code = 404
+    return response
+"""
+
+
+def index(request):
+    if is_blocked(request):
+       return render(request, get_template('blocked'))
+    return render(request, get_template("index"))
+
+
+def ask(request):
+    if is_blocked(request):
+       return render(request, get_template('blocked'))
+    return render(request, get_template('ask'))
+
+
+def search_tag(request, par, pk):
+    if is_blocked(request):
+       return render(request, get_template('blocked'))
+    cur_topic = get_object_or_404(Topic, pk=par)
+    tag = Tag.objects.get(pk=pk)
+    all_threads = cur_topic.threads.all().order_by('-time_posted')
+    returned_threads = []
+    for t in all_threads:
+        if tag.title in t.tags:
+            returned_threads.append(t)
+
+    return render(request, get_template('tag_results'), {'cur_topic': cur_topic, 'threads': returned_threads, 'cur_tag': tag})
+
+
+def view_topics(request):
+    if is_blocked(request):
+       return render(request, get_template('blocked'))
+    topics = Topic.objects.filter()
+    return render(request, get_template('topics'), {'topics': topics})
+
+
+def tags(request, pk):
+    if is_blocked(request):
+       return render(request, get_template('blocked'))
+    cur_topic = get_object_or_404(Topic, pk=pk)
+    tags = Tag.objects.filter(parent=pk).order_by('-uses')  # Or = cur_topic.tags.all
+    return render(request, get_template('tags'), {'cur_topic': cur_topic, 'tags': tags})
+
+
+
+
+def thread(request, par, pk):
+    if is_blocked(request):
+       return render(request, get_template('blocked'))
+    cur_thread = get_object_or_404(Thread, pk=pk)
+    form = CommentForm(request.POST, request.FILES)
+    print(cur_thread.parent)
+    if form.is_valid() and not is_blocked(request):
+        comment = form.save(commit=False)
+        comment.parent = pk
+        comment.time_posted = timezone.now()
+        comment.author_ip = get_client_ip(request)
+        comment.save()
+        cur_thread.comments.add(comment)
+        return redirect('forum.views.thread', par=par, pk=pk)
+    form = CommentForm()
+    comments = cur_thread.comments.all().order_by('-time_posted')
+    cp = get_object_or_404(Topic, pk=cur_thread.parent)
+    return render(request, get_template('thread'), {'cur_thread': cur_thread, 'comments': comments, 'form': form,
+                                                    'cur_parent': cp})
+
+
+def threads(request, pk):
+    if is_blocked(request):
+       return render(request, get_template('blocked'))
+    cur_topic = get_object_or_404(Topic, pk=pk)
+    threads_in_topic = cur_topic.threads.all().order_by('-time_posted')
+
+    return render(request, get_template('threads'), {'cur_topic': cur_topic, 'threads': threads_in_topic})
 
 
 def topic(request, pk):
+    if is_blocked(request):
+       return render(request, get_template('blocked'))
     cur_topic = get_object_or_404(Topic, pk=pk)
     return render(request, get_template('topic'), {'cur_topic': cur_topic})
 
 
 def home_page(request):
+    if is_blocked(request):
+       return render(request, get_template('blocked'))
     return render(request, get_template('home_page'))
 
 
 def counter(request):
+    if is_blocked(request):
+       return render(request, get_template('blocked'))
     thread_pk = request.GET["pk"]
     cur_ip = get_client_ip(request)
     cur_thread = Thread.objects.get(pk=thread_pk)
@@ -160,6 +188,8 @@ def counter(request):
 
 @api_view(['GET', 'POST'])
 def get_comments(request):
+    if is_blocked(request):
+       return render(request, get_template('blocked'))
     if not is_blocked(request):
         thread_pk = request.GET["pk"]
         cur_thread = Thread.objects.get(pk=thread_pk)

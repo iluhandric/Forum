@@ -43,7 +43,7 @@ $(document).ready(
                                         comments.length + " Comments </h1>");
                             } else {
                                 if (comments.length == 1) {
-                                    $t.append('<h1 align="center" style=" font-size: xx-large" >' +
+                                    $t.append('<h1 align="center" style=" font-size: large" >' +
                                             1 + " Comment </h1>");
                                 } else {
                                     $t.append('<h1 align="center" style=" font-size: xx-large" >No comments yet</h1>');
