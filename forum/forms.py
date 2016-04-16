@@ -18,9 +18,12 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ('text', 'image')
         widgets = {
-           'text': forms.Textarea(attrs={'style': 'height: 100px; width: 100%; max-width : 100%', 'align': 'center'}),
-
+           'text': forms.Textarea(attrs={'style': 'height: 100px; width: 100%; max-width : 100%', 'align': 'center',
+                                         'placeholder': "Your comment..."}),
+             'image': forms.FileInput(attrs={'class' : "inputfile", 'type': "input",
+                                             'style':'height: 50px; width: 50px; font-size: 0; opacity:0'})
         }
+
 #  add
 #  'rows': 3,'cols': 50,
 #  to make field size constant

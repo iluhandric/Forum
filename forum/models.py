@@ -29,10 +29,6 @@ class Tag(models.Model):
         return self.title
 
 
-class Photo(models.Model):
-    body = models.TextField(blank=True, null=True)
-
-
 class Comment(models.Model):
     text = models.TextField(max_length=200)
     time_posted = models.DateTimeField(default=timezone.now)

@@ -1,35 +1,71 @@
 {% extends 'forum/discussions.html' %}
 <link rel="stylesheet" href="css/style.css">
 {% block content %}
-    <ol class="breadcrumb" style="font-size: large">
+    <style>
+    .button {
+    border: none;
+    color: white;
+    margin: 3px;
+    padding: 1px 6px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    -webkit-transition-duration: 0.1s; /* Safari */
+    transition-duration: 0.1s;
+    cursor: pointer;
+}
+
+.tag-btn {
+    background-color: #dddddd;
+    color: black;
+    margin: 3px;
+    border: 2px solid #dddddd;
+}
+
+.tag-btn:hover {
+    background-color: #aaaaaa;
+    border: 2px solid #aaaaaa;
+    color: white;
+    margin: 3px;
+    text-decoration: none;
+}
+    </style>
+    <ol class="breadcrumb" style="font-size: medium; word-wrap: break-word">
         <li><a href="{% url 'view_topics'%}">Choose Topic</a></li>
-        <li > <a href="{% url 'topic' pk=cur_parent.pk %}">{{ cur_parent.title }}</a></li>
-        <li > <a href="{% url 'threads' pk=cur_parent.pk %}">Threads</a></li>
-        <li class="active">{{ cur_thread.title }}</li>
+        <li > <a href="{% url 'topic' pk=cur_parent.pk %}" style="word-wrap: break-word">{{ cur_parent.title }}</a></li>
+        <li > <a href="{% url 'threads' pk=cur_parent.pk %}" style="word-wrap: break-word">Threads</a></li>
+        <li class="active" style="word-wrap: break-word; word-break: break-all">{{ cur_thread.title }}</li>
     </ol>
     <div class="container-fluid" style="z-index: 190; left: 0; position: absolute; width: 100%;
     background: url({{ MEDIA_URL }}{{ cur_parent.logo.url }}); min-height: 100%">
-        <div class="container" style="font-size: 25px; height: 100%; background-color: white">
-            <div align="center">
-                <b>
-                    <br>{{ cur_thread.title }}<br>
-                        <p id="counter" style="font-size: large; color: #609ab6">
+        <div class="container-fluid" style="font-size: 25px; min-height: 100%; background-color: white; width: 60%;
+        min-width: 300px; padding: 0 20px">
+
+            <div align="left" style="font-size: x-large; word-wrap: break-word;">
+                <div align="right" style="font-size: small; color: #aaaaaa">Created: {{ cur_thread.time_posted }}</div>
+                <p id="counter" align="right" style="font-size: small; color: #aaaaaa">
                             Loading...
-                        </p>
+                </p>
+                <hr>
+                <b>
+                    {{ cur_thread.title }}<br><br style="font-size: small">
+
                 </b>
             </div>
-            <div class="container-fluid" style="background-color: #eaeaea; padding: 20px; align-content: center">
+
+
+                <ul class="list-inline" style="margin: 0; font-size: 0">
                 {% for tag in cur_thread.parsed_tags.all %}
-                    <a class="btn btn-default"  href = "{% url 'search_tag' par=cur_parent.pk pk=tag.pk%}"
-                       role="button" style=" margin: 5px" >
-                        {{ tag.title }}
-                        <span class="badge" style="background-color: #aaaaaa">
-                            {{ tag.uses }}
-                        </span>
-                    </a>
+
+            <li>       <a class="button tag-btn"  href = "{% url 'search_tag' par=cur_parent.pk pk=tag.pk%}"
+                       role="button" style=" margin: 3px; font-size: 12px;" data-toggle="tooltip"
+                           data-placement="bottom"
+                           title="{% if tag.uses == 1 %}1 thread">{% else %}{{ tag.uses }} threads" >{% endif %}{{ tag.title }}</a> </li>
                 {% endfor %}
-                <hr>
-                <div style="word-break: break-all;">
+                </ul>
+        <br>
+        <div class="container-fluid" style="background-color: #f3f3f3; padding: 20px; align-content: center">
+                <div style="word-wrap: break-word; font-size: small">
                     {{ cur_thread.text }}
                 </div>
 
@@ -43,26 +79,44 @@
                 </div>
                 <hr style="height:3px;border:none;color:#c0c0c0;background-color:#c0c0c0; ">
 
-                <div class="form-group" style=" width: 100%; border: solid 1px black; padding: 10px">
-                    <h1 align="center" style=" word-break: break-all; font-size: x-large " >
-                        Add comment
-                    </h1>
-                    <form  method="POST" type="text" enctype="multipart/form-data" style="width: 100%; height: 30%">
+                <div class="form-group" style="padding: 10px">
+{#                    <h1 align="center" style=" word-break: break-all; font-size: x-large " >#}
+{#                        Add comment#}
+{#                    </h1>#}
+
+                    <form  method="POST" type="text" enctype="multipart/form-data" style=" width: 100%; height: 30%
+                    ; font-size: large">
                         {% csrf_token %}
                         {% for field in form %}
-                            <div style="height: 20%; font-size: large">
-                                {{ field }}
-                            </div>
 
-                        {% endfor %}
-                        <br>
-                        <button type="submit" class="btn btn-default" style="background-color:#00cc99;font-size: xx-large;
-            width: 100%">
-                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                {% if field.name == 'text' %}
+                                     <div style=" width: 100%">{{ field }} </div>
+                                    <button type="submit" class=" btn btn-default" style="margin:10px; float: right;  background-color:#00cc99;font-size: xx-large;">
+
+                            <i class="fa fa-send"></i>
                         </button>
+
+                                {% else %}
+                                    <div  style="float: right; vertical-align: top; margin:8px;
+                                    height:50px; width: 50px;
+                                    background-image:
+                                    url(https://help.blackberry.com/en/priv/current/help/mba1423752627561_lowres_en-us.png);
+                                    background-size: 50px; opacity: 1">
+                                         {{ field }}
+                                    </div>
+
+
+
+                                {% endif %}
+
+
+{#                            {{ form }}#}
+                            {% endfor %}
+
+
                     </form>
                 </div>
-
+        <br>
             <i id ="reload" class="fa fa-refresh" style="position: relative; left: 50%"></i>
             <div id='here'> Loading... </div>
         </div>
