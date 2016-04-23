@@ -48,6 +48,8 @@ def new_thread(request, pk):
                         tag_object.uses = 1
                     tag_object.save()
                     new_thread.parsed_tags.add(tag_object)
+                    cur_topic.tags.add(tag_object)
+                    cur_topic.save()
             new_thread.time_posted = timezone.now()
             new_thread.save()
             new_thread.parent = pk
@@ -105,8 +107,15 @@ def view_topics(request):
     if is_blocked(request):
        return render(request, get_template('blocked'))
     topics = Topic.objects.filter()
+
     return render(request, get_template('topics'), {'topics': topics})
 
+def topics_list(request):
+    if is_blocked(request):
+       return render(request, get_template('blocked'))
+    topics = Topic.objects.filter()
+
+    return render(request, get_template('topics_list'), {'topics': topics})
 
 def tags(request, pk):
     if is_blocked(request):
@@ -149,7 +158,7 @@ def new_comment(request):
         thread_pk = request.GET["pk"]
         cur_thread = Thread.objects.get(pk=thread_pk)
         cur_thread.comments.add(comment)
-    return Response(request.POST['text'])
+    return Response(form.is_valid())
 
 
 def thread(request, par, pk):

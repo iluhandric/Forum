@@ -24,7 +24,7 @@ class CommentForm(forms.ModelForm):
         widgets = {
            'text': forms.Textarea(attrs={'style': 'height: 100px; width: 100%; max-width : 100%', 'align': 'center',
                                          'placeholder': "Your comment...", 'name': 'text'}),
-             'image': forms.FileInput(attrs={'class': "file", 'name': 'file', 'type': "input", 'id': 'file',
+             'image': forms.FileInput(attrs={'multiple accept': 'image/*', 'class': "file", 'name': 'file', 'type': "input", 'id': 'file',
                                              'style': 'height: 20px; width: 20px; font-size: 0; opacity:0'})
         }
 

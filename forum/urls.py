@@ -8,6 +8,7 @@ handler404 = 'views.handler404'
 urlpatterns = [
     url(r'^$', views.home_page, name='home_page'),
     url(r'^topics/$', views.view_topics, name='view_topics'),
+    url(r'^topics-list/$', views.topics_list, name='topics_list'),
     url(r'^ask/$', views.ask, name='ask'),
     url(r'^topics/(?P<pk>[0-9]+)/$', views.topic_content, name='topic'),
     url(r'^topics/(?P<pk>[0-9]+)/new_thread$', views.new_thread, name='new_thread'),

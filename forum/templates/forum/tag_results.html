@@ -12,15 +12,35 @@
 
        <div class="container" style="background-color: #ffffff; height: 100%" >
            <ul class="list-group">
+
+               {% if threads %}
            {% for thread in threads %}
 
-                <a class="list-group-item" href="{% url 'thread'  par=cur_topic.pk pk=thread.pk%}" role="button" style="font-size: x-large; margin: 5px" >
-                                {{ thread.title|linebreaks }}
+                <a class="list-group-item" href="{% url 'thread'  par=cur_topic.pk pk=thread.pk%}"
+                   style="font-size: large; margin: 5px; word-wrap: break-word; padding: 10px" >
+                               <div class="row" style="padding: 5px">
+                                   <div class="col-md-9">{{ thread.title }}</div>
+                       <div  class="col-md-3" style=" font-size: small; color: #a9a9a9"> {{ thread.comments.all|length }}
+                           {% if  thread.comments.all|length == 1 %} Comment
+                            {% else %}
+                               Comments
+                            {% endif %}
+                       <br>Created: {{ thread.time_posted }}
+                        </div></div>
                 </a>
 
 
             {% endfor %}
+           {% else %}
+                <div align="center"><font class="topic-name"  face ='Yu Gothic Light' size=150px style="
+                z-index: 1000; text-decoration: none !important; z-index: 1000;
+                text-underline: none; text-align: center; vertical-align: bottom; height: 100%; margin-top: 0;
+                position: relative ;">
+                            No threads yet.
+                        </font>
+                </div>
            </ul>
+       {% endif %}
 </div>
 
     </div>

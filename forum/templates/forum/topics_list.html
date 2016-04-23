@@ -19,29 +19,25 @@
         opacity: 1;
     }
     </style>
-    <body style="background-color: #EEEEEE">
+    <body style="background-color: #EEEEEE" >
 
 
 
     <div class="container" style="width: 60%; min-width: 300px; background-color: #fff">
     <div align="center" class="breadcrumb" style="font-size: medium;">
         <li class="active">Choose Topic</li>
-    <div style="float: right; margin-top: 5px;"><a href= "{% url 'topics_list' %}"><i class="fa fa-list" aria-hidden="true"></i></a></div>
+    <div style="float: right; margin-top: 5px;"><a href= "{% url 'view_topics' %}" ><i class="fa fa-table" aria-hidden="true"></i></a></div>
     </div>
-    <div class="card-columns">
+    <ul class="list-group" style="width: 98%">
         {% for topic in topics %}
-            <a href="{% url 'topic' pk=topic.pk %}" role="button" style="max-width: 0%">
-            <div class="card" id="topic{{ topic.pk }}" >
-                <img class="card-img-top" src={{ MEDIA_URL }}{{ topic.logo.url }} alt="">
-                <div class="card-block" style="background-color: #f7f7f7">
-                  <h4 class="card-title" ><div class="row" style="color: #000">{{ topic.title }}<hr></div></h4>
-                  <p class="card-text"><div class="row" align="left" style="color: #777777"><div class="col-md-2" align="center">{{topic.threads.all|length}} </div>
-                    <div class=" col-md-6" align="center">Threads</div></div>
-                <div class="row" align="left" style="color: #777777"><div class="col-md-2" align="center">{{topic.tags.all|length}} </div>
-                    <div class="col-md-6" align="center">Tags</div></div></p>
-                </div>
+            <a class="list-group-item" href="{% url 'topic' pk=topic.pk %}" role="button"  style=" margin:5px;
+            background-color: #f5f5f5; border-radius: 0">
+            <div class="row" id="topic{{ topic.pk }}" >
+                  <h4><div  style="color: #000; padding: 3px">{{ topic.title }}</div></h4>
+
               </div>
             </a>
+
 
 
 
@@ -51,7 +47,7 @@
 
         {% endfor %}
 
-    </div></div>
+    </ul></div>
 
 </body>
 <script src="/static/topics.js"></script>

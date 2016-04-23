@@ -80,8 +80,12 @@ $(document).ready(
                         type: 'POST',
                         dataType:'json',
                         success: function (data) {
-                             $.fn.reloadComments();
-                            },
+                             if (data) {
+                                 $.fn.reloadComments();
+                             } else {
+                                 alert('You cannot send empty comment or comment with not image files!');
+                             }
+                        },
                     });
                     $('#image').src = "";
 
