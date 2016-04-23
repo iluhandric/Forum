@@ -11,6 +11,7 @@ $(document).ready(
                 setInterval(function() {
                     $.fn.updateCounter();
                 }, 5000);
+
                 $.fn.reloadComments = function() {
                     $.getJSON("/api/comments.json?pk=" + pk).done(
                         function(response) {
@@ -56,17 +57,41 @@ $(document).ready(
                                 text = text.replace('<', '&lt;').replace('>', '&gt;');
                                 if (comments[i].image > '0') {
                                     image_url = '/media/' + comments[i].image;
-                                    comment_body = '<div style="background-color: #eaeaea; padding: 10px; margin: 10px"> <div align="right" style="font-size: x-small; color: #aaaaaa">' + comments[i].time_posted + "</div>" + '<img align="center" style = "width: auto; max-width: 50%; height:auto" src =' + image_url + '>' + '<h1 style="font-size: medium; word-break: break-all " >' + text + '</h1></div>'
+                                    comment_body = '<hr><div style="padding: 10px; margin: 10px"> <div align="right" style="font-size: x-small; color: #aaaaaa">' + comments[i].time_posted + "</div>" + '<img align="center" style = "width: auto; max-width: 30%; max-height: 30%;height:auto" src =' + image_url + '>' + '<h1 style="font-size: medium; word-wrap: break-word " >' + text + '</h1></div>'
 
                                 } else {
 
-                                    comment_body = '<div style="background-color: #eaeaea; padding: 10px; margin: 10px"> <div align="right" style="font-size: x-small; color: #aaaaaa">' + comments[i].time_posted + "</div>" + '<h1 style="font-size: medium; word-break: break-all " >' + text + '</h1></div>'
+                                    comment_body = '<hr><div style="padding: 10px; margin: 10px"> <div align="right" style="font-size: x-small; color: #aaaaaa">' + comments[i].time_posted + "</div>" + '<h1 style="font-size: medium; word-wrap: break-word " >' + text + '</h1></div>'
                                 }
                                 $t.append(comment_body);
                             }
                         }
                     );
                 };
+                $('#post_comment').submit(function(e){
+
+                    $('#image').src = "";
+                    var info  = new FormData($(this)[0]);
+                    $.ajax({
+                        url: "/api/post_comment.json?pk=" + pk,
+                        data: info,
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        dataType:'json',
+                        success: function (data) {
+                             $.fn.reloadComments();
+                            },
+                    });
+                    $('#image').src = "";
+
+                    e.preventDefault();
+                    $(this).closest('form').find("input[type=text], textarea").val("");
+                    $(this).closest('form').find("input[type=file], textarea").val("");
+                    $('#file').trigger("change");
+                    $.fn.reloadComments();
+                    $('#image').src = "";
+                });
                 $.fn.reloadComments();
                 $("#reload").click(function() {
                     $.fn.reloadComments()
@@ -87,6 +112,9 @@ $(document).ready(
                     current_page--;
                     $.fn.reloadComments()
                 });
+                setInterval(function() {
+                    $.fn.reloadComments();
+                }, 10000);
             }
         );
 

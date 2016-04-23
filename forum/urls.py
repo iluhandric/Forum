@@ -9,7 +9,7 @@ urlpatterns = [
     url(r'^$', views.home_page, name='home_page'),
     url(r'^topics/$', views.view_topics, name='view_topics'),
     url(r'^ask/$', views.ask, name='ask'),
-    url(r'^topics/(?P<pk>[0-9]+)/$', views.topic, name='topic'),
+    url(r'^topics/(?P<pk>[0-9]+)/$', views.topic_content, name='topic'),
     url(r'^topics/(?P<pk>[0-9]+)/new_thread$', views.new_thread, name='new_thread'),
     url(r'^topics/(?P<pk>[0-9]+)/tags$', views.tags, name='tags'),
     url(r'^topics/(?P<pk>[0-9]+)/threads$', views.threads, name='threads'),
@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^topics/(?P<par>[0-9]+)/threads/(?P<pk>[0-9]+)$', views.thread, name='thread'),
     url(r'^api/counter\.json', views.counter),
     url(r'^api/comments\.json', views.get_comments),
+    url(r'^api/post_comment\.json', views.new_comment),
     #url(r'^blocked$', views.get_comments),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

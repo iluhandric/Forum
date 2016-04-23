@@ -3,6 +3,7 @@ from .serializers import *
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 from django.http import HttpResponse
+from django.http import JsonResponse
 import json
 from rest_framework.response import Response
 from rest_framework.decorators import *
@@ -114,26 +115,50 @@ def tags(request, pk):
     tags = Tag.objects.filter(parent=pk).order_by('-uses')  # Or = cur_topic.tags.all
     return render(request, get_template('tags'), {'cur_topic': cur_topic, 'tags': tags})
 
-
-
-
-def thread(request, par, pk):
+@api_view(['GET', 'POST'])
+def get_comments(request):
     if is_blocked(request):
        return render(request, get_template('blocked'))
-    cur_thread = get_object_or_404(Thread, pk=pk)
+    if not is_blocked(request):
+        thread_pk = request.GET["pk"]
+        cur_thread = Thread.objects.get(pk=thread_pk)
+        comments = cur_thread.comments.all().order_by('-time_posted')
+        data = []
+        for com in comments:
+            new_obj = model_to_dict(com)
+            for field in new_obj:
+                if field == 'time_posted':
+                    new_obj[field] = new_obj[field].strftime("%Y/%m/%d %H:%M:%S")
+                if field and field != 'time_posted':
+                    new_obj[field] = str(new_obj[field])
+
+            data.append(new_obj)
+    else:
+        data = [{'text': 'YOU ARE BLOCKED AND NOT ALLOWED TO VIEW OR POST ANYTHING', 'time_posted': ''}]
+    return Response(json.dumps(data), content_type='application/json')
+
+@api_view(['GET', 'POST', 'FILES'])
+def new_comment(request):
     form = CommentForm(request.POST, request.FILES)
-    print(cur_thread.parent)
-    if form.is_valid() and not is_blocked(request):
-        comment = form.save(commit=False)
-        comment.parent = pk
+    if form.is_valid():
+        comment = Comment(text=request.POST.get('text', False).replace('<', '&lt'), image=request.FILES.get('image'))
+        comment.parent = request.GET["pk"]
         comment.time_posted = timezone.now()
         comment.author_ip = get_client_ip(request)
         comment.save()
+        thread_pk = request.GET["pk"]
+        cur_thread = Thread.objects.get(pk=thread_pk)
         cur_thread.comments.add(comment)
-        return redirect('forum.views.thread', par=par, pk=pk)
-    form = CommentForm()
+    return Response(request.POST['text'])
+
+
+def thread(request, par, pk):
+    cur_thread = get_object_or_404(Thread, pk=pk)
     comments = cur_thread.comments.all().order_by('-time_posted')
     cp = get_object_or_404(Topic, pk=cur_thread.parent)
+
+    form = CommentForm()
+
     return render(request, get_template('thread'), {'cur_thread': cur_thread, 'comments': comments, 'form': form,
                                                     'cur_parent': cp})
 
@@ -143,8 +168,17 @@ def threads(request, pk):
        return render(request, get_template('blocked'))
     cur_topic = get_object_or_404(Topic, pk=pk)
     threads_in_topic = cur_topic.threads.all().order_by('-time_posted')
-
     return render(request, get_template('threads'), {'cur_topic': cur_topic, 'threads': threads_in_topic})
+
+
+def topic_content(request, pk):
+    if is_blocked(request):
+       return render(request, get_template('blocked'))
+    cur_topic = get_object_or_404(Topic, pk=pk)
+    threads_in_topic = cur_topic.threads.all().order_by('-time_posted')
+    cur_topic = get_object_or_404(Topic, pk=pk)
+    tags = Tag.objects.filter(parent=pk).order_by('-uses')  # Or = cur_topic.tags.all
+    return render(request, get_template('topic_content'), {'cur_topic': cur_topic, 'threads': threads_in_topic, 'tags': tags})
 
 
 def topic(request, pk):
@@ -186,27 +220,7 @@ def counter(request):
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 
-@api_view(['GET', 'POST'])
-def get_comments(request):
-    if is_blocked(request):
-       return render(request, get_template('blocked'))
-    if not is_blocked(request):
-        thread_pk = request.GET["pk"]
-        cur_thread = Thread.objects.get(pk=thread_pk)
-        comments = cur_thread.comments.all().order_by('-time_posted')
-        data = []
-        for com in comments:
-            new_obj = model_to_dict(com)
-            for field in new_obj:
-                if field == 'time_posted':
-                    new_obj[field] = new_obj[field].strftime("%Y/%m/%d %H:%M:%S")
-                if field and field != 'time_posted':
-                    new_obj[field] = str(new_obj[field])
 
-            data.append(new_obj)
-    else:
-        data = [{'text': 'YOU ARE BLOCKED AND NOT ALLOWED TO VIEW OR POST ANYTHING', 'time_posted': ''}]
-    return Response(json.dumps(data), content_type='application/json')
 
 """
 # def block_user(request):

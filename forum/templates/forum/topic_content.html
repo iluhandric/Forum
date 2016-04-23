@@ -1,0 +1,90 @@
+ {% extends 'forum/discussions.html' %}
+<link rel="stylesheet" href="css/style.css">
+ {% block content %}
+     <ol class="breadcrumb" style="font-size: medium">
+        <li ><a href="{% url 'view_topics'%}">Choose Topic</a></li>
+{#        <li><a href="{% url 'topic' pk=cur_topic.pk%}">{{ cur_topic.title }}</a></li>#}
+        <li class="active">{{ cur_topic.title }}</li>
+     </ol>
+
+     <div class="container-fluid" style="z-index: 190; left: 0; position: absolute; width: 100%;
+            background: url({{ MEDIA_URL }}{{ cur_topic.logo.url }});min-height: 100% ">
+
+       <div class="container" style="background-color: #ffffff; height: 100%; padding: 2%" >
+
+       <div class="row">
+
+
+                <div class="col-md-9 col-sm-8 col-xs-7">
+                <br><div class="button" align="center" style="font-size: x-large">Threads</div>
+           <a href="{% url 'new_thread' pk=cur_topic.pk%}">
+               <button type="button" class="btn btn-default btn-lg" style="
+           float: right; padding: 3px 10px; border-radius: 1px; margin-bottom: 10px; margin-right: 5px; word-break: break-all">
+                   Create new
+               </button>
+           </a><br><br>
+                <ul class="list-group">
+               {% if threads %}
+           {% for thread in threads %}
+
+                <a class="list-group-item" href="{% url 'thread'  par=cur_topic.pk pk=thread.pk%}"
+                   style="font-size: large; margin: 5px; word-wrap: break-word; padding: 10px" >
+                               <div class="row" style="padding: 5px">
+                                   <div class="col-md-9">{{ thread.title }}</div>
+                       <div  class="col-md-3" style=" font-size: small; color: #a9a9a9"> {{ thread.comments.all|length }}
+                           {% if  thread.comments.all|length == 1 %} Comment
+                            {% else %}
+                               Comments
+                            {% endif %}
+                       <br>Created: {{ thread.time_posted }}
+                        </div></div>
+                </a>
+
+
+            {% endfor %}
+           {% else %}
+                <div align="center"><font class="topic-name"  face ='Yu Gothic Light' size=150px style="
+                z-index: 1000; text-decoration: none !important; z-index: 1000;
+                text-underline: none; text-align: center; vertical-align: bottom; height: 100%; margin-top: 0;
+                position: relative ;">
+                            No threads yet.
+                        </font>
+                </div>
+
+       {% endif %}
+                </ul>
+        </div>
+     <div class="col-md-3 col-sm-4 col-xs-5" style=" min-height: 100%; ">
+
+         <div class="container-fluid" style="background-color: #dfdfdf; margin: 3px; min-height: 100%;padding-bottom: 10px;
+         padding-top: 10px"><div align="center"><h1 style="font-size: large">Tags</h1></div>
+            {% if tags%}
+
+            <ul class="list-group">
+            {% for tag in tags %}
+
+                <a class="list-group-item"  href = "{% url 'search_tag' par=cur_topic.pk pk=tag.pk%}" role="button"
+                   style=" font-size: 80%; word-wrap: break-word; word-break:break-all; padding: 0.4vw; margin: 2px; border-radius: 1px; max-width: 100%" >
+                                <div class="row"><div class="col-md-9 col-sm-9 col-xs-9">{{ tag.title }} </div>
+                    <div class="col-md-2 col-sm-2 col-xs-2"><span class="badge" style=" border-radius:0; background-color: #c9c9c9;
+                                font-size: 0.7vw; word-wrap: break-word">{{ tag.uses }}</span></div>
+                </div></a>
+
+
+            {% endfor %}
+                {% else %}
+                 <div align="center"><font class="topic-name" face ='Yu Gothic Light' size=150px style="
+                z-index: 1000; text-decoration: none !important; z-index: 1000;
+                text-underline: none; text-align: left; vertical-align: bottom; height: 100%; margin-top: 0;
+                position: relative ;">
+                            No tags yet.
+                        </font> </div>
+            {% endif %}
+     </ul>
+     </div></div></div>
+</div>
+    </div>
+
+
+{% endblock content%}
+
