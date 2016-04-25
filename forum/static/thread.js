@@ -57,11 +57,20 @@ $(document).ready(
                                 text = text.replace('<', '&lt;').replace('>', '&gt;');
                                 if (comments[i].image > '0') {
                                     image_url = '/media/' + comments[i].image;
-                                    comment_body = '<hr><div style="padding: 10px; margin: 10px"> <div align="right" style="font-size: x-small; color: #aaaaaa">' + comments[i].time_posted + "</div>" + '<img align="center" style = "width: auto; max-width: 30%; max-height: 30%;height:auto" src =' + image_url + '>' + '<h1 style="font-size: medium; word-wrap: break-word " >' + text + '</h1></div>'
+                                    comment_body = '<hr><div style="padding: 10px; margin: 10px"> \<' +
+                                        'div align="right" style="font-size: x-small; color: #aaaaaa">' +
+                                        comments[i].time_posted + "</div>" +
+                                        '<img align="center" style = "width: auto;\ ' +
+                                        'max-width: 30%; max-height: 30%;height:auto" src =' + image_url + '>'
+                                        + '<h1 style="font-size: medium; word-wrap: break-word " >' + '<br>' + text +
+                                        '</h1></div>';
 
                                 } else {
 
-                                    comment_body = '<hr><div style="padding: 10px; margin: 10px"> <div align="right" style="font-size: x-small; color: #aaaaaa">' + comments[i].time_posted + "</div>" + '<h1 style="font-size: medium; word-wrap: break-word " >' + text + '</h1></div>'
+                                    comment_body = '<hr><div style="padding: 10px; margin: 10px"> \<' +
+                                        'div align="right" style="font-size: x-small; color: #aaaaaa">' +
+                                        comments[i].time_posted + "</div>" +
+                                        '<h1 style="font-size: medium; word-wrap: break-word " >' + text + '</h1></div>'
                                 }
                                 $t.append(comment_body);
                             }

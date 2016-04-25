@@ -27,10 +27,10 @@ var right = document.getElementById('right');
         }
         var prs = 50;
         var id = setInterval(frame1, 25);
-        left.onmouseover = NULL;
-        left.onmouseout = NULL;
-        right.onmouseover = NULL;
-        right.onmouseout = NULL;
+        left.onmouseover = null;
+        left.onmouseout = null;
+        right.onmouseover = null;
+        right.onmouseout = null;
 
         function frame1() {
             if  (is_movingf){}
@@ -60,7 +60,7 @@ var right = document.getElementById('right');
                         another.style.width = 100 - prs + '%';
                     }
                 }
-            }
+            } // <div style = 'left: ...'>
         }
     }
     function filch(side) {
@@ -77,10 +77,10 @@ var right = document.getElementById('right');
 
         var prs = 60;
         var id = setInterval(frame, 25);
-        left.onmouseover = NULL;
-        left.onmouseout = NULL;
-        right.onmouseover = NULL;
-        right.onmouseout = NULL;
+        left.onmouseover = null;
+        left.onmouseout = null;
+        right.onmouseover = null;
+        right.onmouseout = null;
         function frame() {
             if (is_movinge) {}
             else {

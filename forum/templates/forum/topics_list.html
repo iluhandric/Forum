@@ -32,9 +32,12 @@
         {% for topic in topics %}
             <a class="list-group-item" href="{% url 'topic' pk=topic.pk %}" role="button"  style=" margin:5px;
             background-color: #f5f5f5; border-radius: 0">
-            <div class="row" id="topic{{ topic.pk }}" >
-                  <h4><div  style="color: #000; padding: 3px">{{ topic.title }}</div></h4>
-
+                <div class="row" id="topic{{ topic.pk }}" >
+                    <h4>
+                        <div  style="color: #000; padding: 3px">
+                            {{ topic.title }}
+                        </div>
+                    </h4>
               </div>
             </a>
 

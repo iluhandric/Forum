@@ -1,7 +1,7 @@
 {% extends 'forum/discussions.html' %}
 <link rel="stylesheet" href="css/style.css">
 {% block content %}
-    <style>
+<style>
     .button {
     border: none;
     color: white;
@@ -13,32 +13,32 @@
     -webkit-transition-duration: 0.1s; /* Safari */
     transition-duration: 0.1s;
     cursor: pointer;
-}
-.tooltip .tooltiptext::after {
-    content: " ";
-    position: absolute;
-    top: 100%; /* At the bottom of the tooltip */
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: black transparent transparent transparent;
-}
-.tag-btn {
-    background-color: #dddddd;
-    color: black;
-    margin: 3px;
-    border: 2px solid #dddddd;
-}
+    }
+    .tooltip .tooltiptext::after {
+        content: " ";
+        position: absolute;
+        top: 100%; /* At the bottom of the tooltip */
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: black transparent transparent transparent;
+    }
+    .tag-btn {
+        background-color: #dddddd;
+        color: black;
+        margin: 3px;
+        border: 2px solid #dddddd;
+    }
 
-.tag-btn:hover {
-    background-color: #aaaaaa;
-    border: 2px solid #aaaaaa;
-    color: white;
-    margin: 3px;
-    text-decoration: none;
-}
-    </style>
+    .tag-btn:hover {
+        background-color: #aaaaaa;
+        border: 2px solid #aaaaaa;
+        color: white;
+        margin: 3px;
+        text-decoration: none;
+    }
+</style>
     <ol class="breadcrumb" style="font-size: medium; word-wrap: break-word">
         <li><a href="{% url 'view_topics'%}">Choose Topic</a></li>
         <li > <a href="{% url 'topic' pk=cur_parent.pk %}" style="word-wrap: break-word">{{ cur_parent.title }}</a></li>
@@ -103,7 +103,7 @@
                     <form  id ='post_comment' method="POST" type="text" enctype="multipart/form-data" style=" width: 100%; height: 30%
                     ; font-size: large">
                         {% csrf_token %}
-                        <img src = "" id="image"style="max-height: 50%; max-width: 100%; padding: 5px" >
+                        <img src = "" id="image" style="max-height: 50%; max-width: 100%; padding: 5px" >
                         {% for field in form %}
                             {% if field.name == 'text' %}
                                  <div style=" width: 100%">{{ field }} </div>

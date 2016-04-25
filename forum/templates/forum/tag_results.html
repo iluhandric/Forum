@@ -8,16 +8,16 @@
      </ol>
 
      <div class="container-fluid" style="z-index: 190; left: 0; position: absolute; width: 100%;
-            background: url({{ MEDIA_URL }}{{ cur_topic.logo.url }});min-height: 100% ">
+            background: url({{ MEDIA_URL }}{{ cur_topic.logo.url }});min-height: 100%; height: 100% ">
 
-       <div class="container" style="background-color: #ffffff; height: 100%" >
-           <ul class="list-group">
+       <div class="container" style="background-color: #ffffff; min-height: 100% ; height: 100%" >
+           <ul class="list-group" style="background-color: #ffffff; height: 98%">
 
                {% if threads %}
            {% for thread in threads %}
 
                 <a class="list-group-item" href="{% url 'thread'  par=cur_topic.pk pk=thread.pk%}"
-                   style="font-size: large; margin: 5px; word-wrap: break-word; padding: 10px" >
+                   style="font-size: large; word-wrap: break-word; padding: 10px" >
                                <div class="row" style="padding: 5px">
                                    <div class="col-md-9">{{ thread.title }}</div>
                        <div  class="col-md-3" style=" font-size: small; color: #a9a9a9"> {{ thread.comments.all|length }}

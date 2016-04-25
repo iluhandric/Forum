@@ -5,7 +5,7 @@
     <style>
 
     .card-img-top{
-         -webkit-filter: brightness(100%);
+        -webkit-filter: brightness(100%);
         -webkit-transition-duration: 0.4s; /* Safari */
         transition-duration: 0.4s;
         width: 100%;
@@ -13,13 +13,13 @@
         opacity: 0.8;
     }
     .card:hover > .card-img-top:hover{
-         -webkit-filter: brightness(150%);
+        -webkit-filter: brightness(150%);
         -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
+        transition-duration: 0.4s;
         opacity: 1;
     }
     </style>
-    <body style="background-color: #EEEEEE">
+<body style="background-color: #EEEEEE">
 
 
 
@@ -34,48 +34,26 @@
             <div class="card" id="topic{{ topic.pk }}" >
                 <img class="card-img-top" src={{ MEDIA_URL }}{{ topic.logo.url }} alt="">
                 <div class="card-block" style="background-color: #f7f7f7">
-                  <h4 class="card-title" ><div class="row" style="color: #000">{{ topic.title }}<hr></div></h4>
-                  <p class="card-text"><div class="row" align="left" style="color: #777777"><div class="col-md-2" align="center">{{topic.threads.all|length}} </div>
-                    <div class=" col-md-6" align="center">Threads</div></div>
-                <div class="row" align="left" style="color: #777777"><div class="col-md-2" align="center">{{topic.tags.all|length}} </div>
-                    <div class="col-md-6" align="center">Tags</div></div></p>
+                <h4 class="card-title" >
+                <div class="row" style="color: #000; word-wrap: break-word">
+                    {{ topic.title }}<hr>
+                </div>
+                </h4>
+                <p class="card-text">
+                    <div align="left" style="color: #777777; word-wrap: break-word">
+                        {{topic.threads.all|length}}  Threads <br>
+                        {{topic.tags.all|length}} Tags
+                    </div>
+                </p>
                 </div>
               </div>
             </a>
-
-
-
-
-{#        <p><a href="{% url 'topic' pk=topic.pk %}"  class="btn btn-primary" role="button">Go!</a>#}
-{#            <a href="#" class="btn btn-default" role="button">Button</a></p>#}
-
         {% endfor %}
-
-    </div></div>
+    </div>
+</div>
 
 </body>
 <script src="/static/topics.js"></script>
-{##}
-{#<a class="button" id = {{ topic.pk }} href="{% url 'topic' pk=topic.pk %}" style="background: #fff; z-index : 500;#}
-{#            display: inline; text-decoration: none !important;">#}
-{#                    <div  class = "logot" style= " position:relative;#}
-{#                    background: url({{ MEDIA_URL }}{{ topic.logo.url }});#}
-{#                     width:100%" >#}
-{#                        <div  style=" color: white;#}
-{#                    z-index: 100; text-decoration: none !important;#}
-{#                    text-underline: none;#}
-{#                    background-color:rgba(0, 0, 0, 0.5); text-align: left; vertical-align: bottom; height: 100%; margin-top: 0;#}
-{#                    position: relative ; padding: 10px">#}
-{#                            <font class="topic-name" face ='Yu Gothic Light'  style=" color: white;#}
-{#                    z-index: 1000; text-decoration: none !important; z-index: 1000;#}
-{#                    text-underline: none; text-align: left; vertical-align: bottom;  margin-top: 0;#}
-{#                    position: relative ; font-size: x-large">#}
-{#                                {{ topic.title|linebreaks }}#}
-{#                            </font>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </a>#}
-
 
 {% endblock content%}
 
