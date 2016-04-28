@@ -5,17 +5,17 @@
     <style>
 
     .card-img-top{
-        -webkit-filter: brightness(100%);
-        -webkit-transition-duration: 0.4s; /* Safari */
-        transition-duration: 0.4s;
+{#        -webkit-filter: brightness(100%);#}
+{#        -webkit-transition-duration: 0.4s; /* Safari */#}
+{#        transition-duration: 0.4s;#}
         width: 100%;
         height: auto;
         opacity: 0.8;
     }
     .card:hover > .card-img-top:hover{
         -webkit-filter: brightness(150%);
-        -webkit-transition-duration: 0.4s; /* Safari */
-        transition-duration: 0.4s;
+{#        -webkit-transition-duration: 0.4s; /* Safari */#}
+{#        transition-duration: 0.4s;#}
         opacity: 1;
     }
     </style>
@@ -24,27 +24,27 @@
 
 
     <div class="container" style="width: 60%; min-width: 300px; background-color: #fff">
-    <div align="center" class="breadcrumb" style="font-size: medium;">
+    <div align="center" class="breadcrumb" style="margin-top: 70px;font-size: medium;">
         <li class="active">Choose Topic</li>
     <div style="float: right; margin-top: 5px;"><a href= "{% url 'topics_list' %}"><i class="fa fa-list" aria-hidden="true"></i></a></div>
     </div>
-    <div class="card-columns">
+    <div class="card-columns"  style="">
         {% for topic in topics %}
             <a href="{% url 'topic' pk=topic.pk %}" role="button" style="max-width: 0%">
             <div class="card" id="topic{{ topic.pk }}" >
                 <img class="card-img-top" src={{ MEDIA_URL }}{{ topic.logo.url }} alt="">
                 <div class="card-block" style="background-color: #f7f7f7">
                 <h4 class="card-title" >
-                <div class="row" style="color: #000; word-wrap: break-word">
+                <div style="color: #000; word-wrap: break-word">
                     {{ topic.title }}<hr>
                 </div>
                 </h4>
                 <p class="card-text">
                     <div align="left" style="color: #777777; word-wrap: break-word">
                         {{topic.threads.all|length}}  Threads <br>
-                        {{topic.tags.all|length}} Tags
+                        {{topic.comments.all|length}} Comments
                     </div>
-                </p>
+
                 </div>
               </div>
             </a>

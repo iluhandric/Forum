@@ -1,0 +1,84 @@
+
+{% extends 'forum/discussions.html' %}
+
+{% block content %}
+{#<form method="get" action="." class="navbar-form navbar-left" style="margin-top: 80px">#}
+{#      <div class="form-group">#}
+{#          {% for field in form %}#}
+{#          {% if field.name == 'q' %}#}
+{#            {{ field }}#}
+{#          {% endif %}#}
+{#      {% endfor %}#}
+{#      </div>#}
+{#      <input type="submit" value="Search">#}
+{#</form>#}
+
+
+{#     <form method="get" action="." style="margin-top: 70px">#}
+{##}
+{#      {% for field in form %}#}
+{#          {% if field.name == 'q' %}#}
+{#            {{ field.value }}#}
+{#          {% endif %}#}
+{#      {% endfor %}#}
+{#      <input type="submit" value="Search">#}
+{#    </form>#}
+     <ol class="breadcrumb" style="font-size: medium;margin-top: 80px">
+        <li class="active">Search threads for "{% for field in form %}
+          {% if field.name == 'q' %}
+            {{ field.value }}
+          {% endif %}
+      {% endfor %}" :</li>
+     </ol>
+
+     <div class="container-fluid" style="z-index: 190; left: 0; position: absolute; width: 100%;
+            background: url({{ MEDIA_URL }}{{ cur_topic.logo.url }});min-height: 100%; height: 100% ">
+
+       <div class="container" style="background-color: #ffffff; min-height: 100% ; height: 100%" >
+           <ul class="list-group" style="background-color: #ffffff; height: 98%">
+
+              {% if query %}
+           {% for thread in page.object_list %}
+
+                <a class="list-group-item" href="{% url 'thread'  par=thread.object.parent pk=thread.object.pk%}"
+                   style="font-size: large; word-wrap: break-word; padding: 10px" >
+                               <div class="row" style="padding: 5px">
+                                   <div class="col-md-9">{{ thread.object.title }}</div>
+                       <div  class="col-md-3" style=" font-size: small; color: #a9a9a9"> {{ thread.object.comments.all|length }}
+                           {% if  thread.object.comments.all|length == 1 %} Comment
+                            {% else %}
+                               Comments
+                            {% endif %}
+                       <br>Created: {{ thread.object.time_posted }}
+                        </div></div>
+                </a>
+
+            {% empty %}
+
+               <div align="center"><font class="topic-name"  face ='Yu Gothic Light' size=150px style="
+                z-index: 1000; text-decoration: none !important; z-index: 1000;
+                text-underline: none; text-align: center; vertical-align: bottom; height: 100%; margin-top: 0;
+                position: relative ;">
+                             No results :(
+                        </font>
+                </div>
+            {% endfor %}
+
+
+           </ul>
+       {% endif %}
+</div>
+
+    </div>
+
+
+{% endblock content%}
+
+{#<h3>Results</h3>#}
+{##}
+{#<p><a href="{% url 'thread' par=result.object.parent pk=result.object.pk %}">{{ result.object.title }}</a></p>#}
+{#{% empty %}#}
+{#<p>No results found.</p>#}
+{#{% endfor %}#}
+{#{% endif %}#}
+

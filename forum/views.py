@@ -8,10 +8,15 @@ import json
 from rest_framework.response import Response
 from rest_framework.decorators import *
 from django.forms.models import model_to_dict
-
+from haystack.utils.app_loading import haystack_get_model
+from haystack import forms
 
 def get_template(name):
     return 'forum/' + name + '.html'
+
+
+def search(request):
+    return render(request, 'search/search.html', {'searchform': forms.SearchForm})
 
 def is_blocked(request):
     user_ip = get_client_ip(request)
@@ -89,18 +94,17 @@ def ask(request):
     return render(request, get_template('ask'))
 
 
-def search_tag(request, par, pk):
+def search_tag(request, pk):
     if is_blocked(request):
        return render(request, get_template('blocked'))
-    cur_topic = get_object_or_404(Topic, pk=par)
     tag = Tag.objects.get(pk=pk)
-    all_threads = cur_topic.threads.all().order_by('-time_posted')
+    all_threads = Thread.objects.all().order_by('-time_posted')
     returned_threads = []
     for t in all_threads:
         if tag.title in t.tags:
             returned_threads.append(t)
 
-    return render(request, get_template('tag_results'), {'cur_topic': cur_topic, 'threads': returned_threads, 'cur_tag': tag})
+    return render(request, get_template('tag_results'), {'threads': returned_threads, 'cur_tag': tag})
 
 
 def view_topics(request):
@@ -117,12 +121,11 @@ def topics_list(request):
 
     return render(request, get_template('topics_list'), {'topics': topics})
 
-def tags(request, pk):
+def tags(request):
     if is_blocked(request):
        return render(request, get_template('blocked'))
-    cur_topic = get_object_or_404(Topic, pk=pk)
-    tags = Tag.objects.filter(parent=pk).order_by('-uses')  # Or = cur_topic.tags.all
-    return render(request, get_template('tags'), {'cur_topic': cur_topic, 'tags': tags})
+    tags = Tag.objects.order_by('-uses')  # Or = cur_topic.tags.all
+    return render(request, get_template('tags'), {'tags': tags})
 
 @api_view(['GET', 'POST'])
 def get_comments(request):
@@ -157,6 +160,8 @@ def new_comment(request):
         comment.save()
         thread_pk = request.GET["pk"]
         cur_thread = Thread.objects.get(pk=thread_pk)
+        cur_topic = Topic.objects.get(pk=cur_thread.parent)
+        cur_topic.comments.add(comment)
         cur_thread.comments.add(comment)
     return Response(form.is_valid())
 

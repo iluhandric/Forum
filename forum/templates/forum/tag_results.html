@@ -1,9 +1,7 @@
  {% extends 'forum/discussions.html' %}
 <link rel="stylesheet" href="css/style.css">
  {% block content %}
-     <ol class="breadcrumb" style="font-size: medium">
-        <li ><a href="{% url 'view_topics'%}">Choose Topic</a></li>
-       <li><a href="{% url 'topic' pk=cur_topic.pk%}">{{cur_topic.title }}</a></li>
+     <ol class="breadcrumb" style="margin-top:70px; font-size: medium">
         <li class="active">Threads with tag "{{ cur_tag.title }}"</li>
      </ol>
 
@@ -16,7 +14,7 @@
                {% if threads %}
            {% for thread in threads %}
 
-                <a class="list-group-item" href="{% url 'thread'  par=cur_topic.pk pk=thread.pk%}"
+                <a class="list-group-item" href="{% url 'thread'  par=thread.parent pk=thread.pk%}"
                    style="font-size: large; word-wrap: break-word; padding: 10px" >
                                <div class="row" style="padding: 5px">
                                    <div class="col-md-9">{{ thread.title }}</div>

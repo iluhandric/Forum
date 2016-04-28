@@ -1,0 +1,26 @@
+<h2>Search</h2>
+
+{#<form method="get" action=".">#}
+{#  <table>#}
+{##}
+{#      {% for field in form %}#}
+{#      {% if field == 'text' %}#}
+{#          {{ field }}#}
+{#          {{ form.as_table }}#}
+{#          {% endif %}#}
+{#      {% endfor %}#}
+{#  <tr>#}
+{#      <td>&nbsp;</td>#}
+{#      <td><input type="submit" value="Search"></td>#}
+{#    </tr>#}
+{#  </table>#}
+{#</form>#}
+{% if query %}
+<h3>Results</h3>
+{% for result in page.object_list %}
+<p><a href="{% url 'thread' pk =  result.object.pk %}">{{ result.object.title }}</a></p>
+{% empty %}
+<p>No results found.</p>
+{% endfor %}
+{% endif %}
+

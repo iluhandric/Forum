@@ -1,21 +1,21 @@
  {% extends 'forum/discussions.html' %}
 <link rel="stylesheet" href="css/style.css">
  {% block content %}
-     <ol class="breadcrumb" style="font-size: medium">
-        <li ><a href="{% url 'view_topics'%}">Choose Topic</a></li>
-{#        <li><a href="{% url 'topic' pk=cur_topic.pk%}">{{ cur_topic.title }}</a></li>#}
-        <li class="active">{{ cur_topic.title }}</li>
-     </ol>
+
 
      <div class="container-fluid" style="z-index: 190; left: 0; position: absolute; width: 100%;
             background: url({{ MEDIA_URL }}{{ cur_topic.logo.url }});min-height: 100% ">
 
-       <div class="container" style="background-color: #ffffff; height: 100%; padding: 2%" >
-
+       <div class="container" style="background-color: #ffffff; height: 100%; width: 60%" >
+<ol class="breadcrumb" style="margin-top: 70px;font-size: medium">
+        <li ><a href="{% url 'view_topics'%}">Choose Topic</a></li>
+{#        <li><a href="{% url 'topic' pk=cur_topic.pk%}">{{ cur_topic.title }}</a></li>#}
+        <li class="active">{{ cur_topic.title }}</li>
+     </ol>
        <div class="row">
 
 
-                <div class="col-md-9 col-sm-8 col-xs-7">
+                <div class="col-md-12 col-sm-12 col-xs-12">
                 <br><div class="button" align="center" style="font-size: x-large">Threads</div><hr>
            <a href="{% url 'new_thread' pk=cur_topic.pk%}">
                <button type="button" class="btn btn-default" style="
@@ -51,37 +51,37 @@
        {% endif %}
                 </ul>
         </div>
-     <div class="col-md-3 col-sm-4 col-xs-5" style=" min-height: 100%; ">
-
-         <div class="container-fluid" style="background-color: #dfdfdf; margin: 3px; min-height: 100%;padding-bottom: 10px;
-         padding-top: 10px"><div align="center"><h1 style="font-size: large">Tags</h1></div>
-            {% if tags%}
-
-            <ul class="list-group">
-            {% for tag in tags %}
-
-                <a class="list-group-item"  href = "{% url 'search_tag' par=cur_topic.pk pk=tag.pk%}" role="button"
-                   style=" word-wrap: break-word;  padding: 0; margin: 3px; border-radius: 1px; max-width: 100%" >
-                                <div class="container-fluid"><div class="row">
-                                    <div class="col-md-10 col-sm-8 col-xs-12" style=" font-size: 80%;padding-top: 2px;">
-                                        {{ tag.title }}
-                                    </div>
-                                <div align="center" class="col-md-2 col-sm-4 col-xs-12" style="height:100%;
-                                background-color: #777777; color: white">
-                                    {{ tag.uses }}
-                                </div>
-                </div></div></a>
-
-
-            {% endfor %}
-                {% else %}
-                 <div align="center"><p style="word-wrap: break-word; font-family: 'Roboto',
-                sans-serif; font-size: 40px; font-weight:100 ">No tags</p> </div>
-            {% endif %}
-     </ul>
-     </div></div></div>
+{#     <div class="col-md-3 col-sm-4 col-xs-5" style=" min-height: 100%; ">#}
+{##}
+{#         <div class="container-fluid" style="background-color: #dfdfdf; margin: 3px; min-height: 100%;padding-bottom: 10px;#}
+{#         padding-top: 10px"><div align="center"><h1 style="font-size: large">Tags</h1></div>#}
+{#            {% if tags%}#}
+{##}
+{#            <ul class="list-group">#}
+{#            {% for tag in tags %}#}
+{##}
+{#                <a class="list-group-item"  href = "{% url 'search_tag' pk=tag.pk%}" role="button"#}
+{#                   style=" word-wrap: break-word;  padding: 0; margin: 3px; border-radius: 1px; max-width: 100%" >#}
+{#                                <div class="container-fluid"><div class="row">#}
+{#                                    <div class="col-md-10 col-sm-8 col-xs-12" style=" font-size: 80%;padding-top: 2px;">#}
+{#                                        {{ tag.title }}#}
+{#                                    </div>#}
+{#                                <div align="center" class="col-md-2 col-sm-4 col-xs-12" style="height:100%;#}
+{#                                background-color: #777777; color: white">#}
+{#                                    {{ tag.uses }}#}
+{#                                </div>#}
+{#                </div></div></a>#}
+{##}
+{##}
+{#            {% endfor %}#}
+{#                {% else %}#}
+{#                 <div align="center"><p style="word-wrap: break-word; font-family: 'Roboto',#}
+{#                sans-serif; font-size: 40px; font-weight:100 ">No tags</p> </div>#}
+{#            {% endif %}#}
+{#     </ul>#}
+{#     </div></div></div>#}
 </div>
-    </div>
+    </div></div>
 
 
 {% endblock content%}

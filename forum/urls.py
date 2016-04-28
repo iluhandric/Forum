@@ -3,6 +3,7 @@ from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
 
+import haystack
 handler404 = 'views.handler404'
 
 urlpatterns = [
@@ -12,11 +13,12 @@ urlpatterns = [
     url(r'^ask/$', views.ask, name='ask'),
     url(r'^topics/(?P<pk>[0-9]+)/$', views.topic_content, name='topic'),
     url(r'^topics/(?P<pk>[0-9]+)/new_thread$', views.new_thread, name='new_thread'),
-    url(r'^topics/(?P<pk>[0-9]+)/tags$', views.tags, name='tags'),
+    url(r'^tags$', views.tags, name='tags'),
     url(r'^topics/(?P<pk>[0-9]+)/threads$', views.threads, name='threads'),
-    url(r'^topics/(?P<par>[0-9]+)/search/(?P<pk>[0-9]+)$', views.search_tag, name='search_tag'),
+    url(r'^search_tag/(?P<pk>[0-9]+)$', views.search_tag, name='search_tag'),
     url(r'^topics/(?P<par>[0-9]+)/threads/(?P<pk>[0-9]+)$', views.thread, name='thread'),
     url(r'^api/counter\.json', views.counter),
+    url(r'^search$', views.search, name='search'),
     url(r'^api/comments\.json', views.get_comments),
     url(r'^api/post_comment\.json', views.new_comment),
     #url(r'^blocked$', views.get_comments),

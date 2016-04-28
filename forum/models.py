@@ -2,6 +2,9 @@ from django.db import models
 from django.utils import timezone
 import uuid
 import os
+from haystack import indexes
+
+ 
 
 
 def get_image_path(instance, filename):
@@ -62,13 +65,16 @@ class Thread(models.Model):
     def __str__(self):
         return self.title
 
+    def __unicode__(self):
+        return self.title
+
 
 class Topic(models.Model):
     title = models.CharField(max_length=100)
     logo = models.ImageField(upload_to=get_unique_path)
     threads = models.ManyToManyField(Thread, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
-
+    comments = models.ManyToManyField(Comment, blank=True)
     def add_topic(self):
         self.save()
 

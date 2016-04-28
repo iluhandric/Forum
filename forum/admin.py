@@ -1,4 +1,5 @@
 from django.contrib import admin
+import haystack
 
 from .models import *
 admin.site.register(Thread)
