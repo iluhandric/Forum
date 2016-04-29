@@ -1,7 +1,5 @@
 {% extends 'forum/discussions.html' %}
-<link rel="stylesheet" href="css/style.css">
 {% block content %}
-    fa fa-refresh
 <style>
     .button {
     border: none;
@@ -40,17 +38,15 @@
         text-decoration: none;
     }
 </style>
+<div class="container-fluid" style="background: url({{ MEDIA_URL }}{{ cur_parent.logo.url }}); min-height: 100%; position: absolute; left: 0;;width: 100%">
+    <div class="container" style="width: 60%; min-width: 300px; background-color: #fff">
+    <div align="center" class="breadcrumb" style="margin-top: 70px;font-size: medium;">
 
-    <div class="container-fluid" style="z-index: 190; left: 0; position: absolute; width: 100%;
-    background: url({{ MEDIA_URL }}{{ cur_parent.logo.url }}); min-height: 100%">
 
-        <div class="container-fluid" style="font-size: 25px; min-height: 100%; background-color: white; width: 70%;
-        min-width: 300px; padding: 0 20px">
-        <ol class="breadcrumb" style="margin-top:70px; font-size: medium; word-wrap: break-word">
             <li><a href="{% url 'view_topics'%}">Choose Topic</a></li>
             <li > <a href="{% url 'topic' pk=cur_parent.pk %}" style="word-wrap: break-word">{{ cur_parent.title }}</a></li>
             <li class="active" style="">{{ cur_thread.title }}</li>
-        </ol>
+        </div>
 
             <div align="left" style="font-size: x-large; word-wrap: break-word; padding: 10px">
 

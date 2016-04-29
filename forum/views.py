@@ -8,8 +8,17 @@ import json
 from rest_framework.response import Response
 from rest_framework.decorators import *
 from django.forms.models import model_to_dict
-from haystack.utils.app_loading import haystack_get_model
 from haystack import forms
+from haystack.management.commands import update_index
+
+"""
+
+UPDATING INDEXES
+
+update_index.Command().handle()
+
+"""
+
 
 def get_template(name):
     return 'forum/' + name + '.html'
@@ -17,6 +26,7 @@ def get_template(name):
 
 def search(request):
     return render(request, 'search/search.html', {'searchform': forms.SearchForm})
+
 
 def is_blocked(request):
     user_ip = get_client_ip(request)
@@ -27,6 +37,7 @@ def is_blocked(request):
         return False
     except Blocked.MultipleObjectsReturned:
         return True
+
 
 def new_thread(request, pk):
     if is_blocked(request):
@@ -58,8 +69,8 @@ def new_thread(request, pk):
             new_thread.time_posted = timezone.now()
             new_thread.save()
             new_thread.parent = pk
-
             cur_topic.threads.add(new_thread)
+            update_index.Command().handle()
             return redirect('forum.views.thread', par=pk, pk=new_thread.pk)
     form = ThreadForm()
     return render(request,  get_template('new_thread'), {'cur_topic':cur_topic,'form':form})
@@ -90,7 +101,7 @@ def index(request):
 
 def ask(request):
     if is_blocked(request):
-       return render(request, get_template('blocked'))
+        return render(request, get_template('blocked'))
     return render(request, get_template('ask'))
 
 
@@ -109,28 +120,28 @@ def search_tag(request, pk):
 
 def view_topics(request):
     if is_blocked(request):
-       return render(request, get_template('blocked'))
+        return render(request, get_template('blocked'))
     topics = Topic.objects.filter()
 
     return render(request, get_template('topics'), {'topics': topics})
 
 def topics_list(request):
     if is_blocked(request):
-       return render(request, get_template('blocked'))
+        return render(request, get_template('blocked'))
     topics = Topic.objects.filter()
 
     return render(request, get_template('topics_list'), {'topics': topics})
 
 def tags(request):
     if is_blocked(request):
-       return render(request, get_template('blocked'))
+        return render(request, get_template('blocked'))
     tags = Tag.objects.order_by('-uses')  # Or = cur_topic.tags.all
     return render(request, get_template('tags'), {'tags': tags})
 
 @api_view(['GET', 'POST'])
 def get_comments(request):
     if is_blocked(request):
-       return render(request, get_template('blocked'))
+        return render(request, get_template('blocked'))
     if not is_blocked(request):
         thread_pk = request.GET["pk"]
         cur_thread = Thread.objects.get(pk=thread_pk)
@@ -179,7 +190,7 @@ def thread(request, par, pk):
 
 def threads(request, pk):
     if is_blocked(request):
-       return render(request, get_template('blocked'))
+        return render(request, get_template('blocked'))
     cur_topic = get_object_or_404(Topic, pk=pk)
     threads_in_topic = cur_topic.threads.all().order_by('-time_posted')
     return render(request, get_template('threads'), {'cur_topic': cur_topic, 'threads': threads_in_topic})
@@ -187,7 +198,7 @@ def threads(request, pk):
 
 def topic_content(request, pk):
     if is_blocked(request):
-       return render(request, get_template('blocked'))
+        return render(request, get_template('blocked'))
     cur_topic = get_object_or_404(Topic, pk=pk)
     threads_in_topic = cur_topic.threads.all().order_by('-time_posted')
     cur_topic = get_object_or_404(Topic, pk=pk)
@@ -197,20 +208,20 @@ def topic_content(request, pk):
 
 def topic(request, pk):
     if is_blocked(request):
-       return render(request, get_template('blocked'))
+        return render(request, get_template('blocked'))
     cur_topic = get_object_or_404(Topic, pk=pk)
     return render(request, get_template('topic'), {'cur_topic': cur_topic})
 
 
 def home_page(request):
     if is_blocked(request):
-       return render(request, get_template('blocked'))
+        return render(request, get_template('blocked'))
     return render(request, get_template('home_page'))
 
 
 def counter(request):
     if is_blocked(request):
-       return render(request, get_template('blocked'))
+        return render(request, get_template('blocked'))
     thread_pk = request.GET["pk"]
     cur_ip = get_client_ip(request)
     cur_thread = Thread.objects.get(pk=thread_pk)

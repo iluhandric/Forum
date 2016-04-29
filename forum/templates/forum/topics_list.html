@@ -19,11 +19,8 @@
         opacity: 1;
     }
     </style>
-    <body style="background-color: #EEEEEE" >
-
-
-
-    <div class="container" style="width: 60%; min-width: 300px; background-color: #fff">
+    <div align="center" class="container-fluid" style="background-color: #bababa; min-height: 100%; width: 100%; left:0; position: absolute">
+    <div class="container" style="width: 60%; min-width: 300px; background-color: white; height: 100%">
     <div align="center" class="breadcrumb" style="margin-top: 70px;font-size: medium;">
         <li class="active">Choose Topic</li>
     <div style="float: right; margin-top: 5px;"><a href= "{% url 'view_topics' %}" ><i class="fa fa-table" aria-hidden="true"></i></a></div>
@@ -52,7 +49,7 @@
 
     </ul></div>
 
-</body>
+</div>
 <script src="/static/topics.js"></script>
 {##}
 {#<a class="button" id = {{ topic.pk }} href="{% url 'topic' pk=topic.pk %}" style="background: #fff; z-index : 500;#}

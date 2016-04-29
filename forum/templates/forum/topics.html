@@ -1,7 +1,5 @@
- {% extends 'forum/discussions.html' %}
-<link rel="stylesheet" href="css/style.css" xmlns:width="http://www.w3.org/1999/xhtml">
-
-{% block content %}
+ {% extends 'forum/base.html' %}
+{% block section %}
     <style>
 
     .card-img-top{
@@ -18,12 +16,10 @@
 {#        transition-duration: 0.4s;#}
         opacity: 1;
     }
+
     </style>
-<body style="background-color: #EEEEEE">
-
-
-
-    <div class="container" style="width: 60%; min-width: 300px; background-color: #fff">
+    <div align="center" class="container-fluid" style="background-color: #bababa; min-height: 100%; width: 100%; left:0; position: absolute">
+    <div class="container" style="width: 60%; min-width: 300px; background-color: white">
     <div align="center" class="breadcrumb" style="margin-top: 70px;font-size: medium;">
         <li class="active">Choose Topic</li>
     <div style="float: right; margin-top: 5px;"><a href= "{% url 'topics_list' %}"><i class="fa fa-list" aria-hidden="true"></i></a></div>
@@ -33,10 +29,10 @@
             <a href="{% url 'topic' pk=topic.pk %}" role="button" style="max-width: 0%">
             <div class="card" id="topic{{ topic.pk }}" >
                 <img class="card-img-top" src={{ MEDIA_URL }}{{ topic.logo.url }} alt="">
-                <div class="card-block" style="background-color: #f7f7f7">
+                <div class="card-block" style="background-color: #e8e8e8">
                 <h4 class="card-title" >
                 <div style="color: #000; word-wrap: break-word">
-                    {{ topic.title }}<hr>
+                    {{ topic.title }}<hr style="color: #000;">
                 </div>
                 </h4>
                 <p class="card-text">
@@ -52,8 +48,7 @@
     </div>
 </div>
 
-</body>
-<script src="/static/topics.js"></script>
+</div>
 
-{% endblock content%}
+{% endblock%}
 

@@ -1,52 +1,72 @@
  {% extends 'forum/base.html' %}
  {% block section %}
-     <body style="height:98%">
-        <div id = 'right_black' style='position:absolute;top:0;left:50%;width:50%;height:100%;background-color:  #000;'>
-            <h1 style="text-align:center;
-            padding-left: 40%; padding-top: 40%; width:80%; font-size: 4vh; color: white; word-wrap: normal;">
+     <style>
+     button {
+        margin:0 auto;
+        display:block;
+    }
+     .back{
+         background-image: url(media/back.jpg);
+         background-color: #000000;
+         background-size: 100% 100% ;
+         min-width: 100%;
+{#         width: auto;#}
+{#         -webkit-filter: brightness(0.7);#}
+{#        filter: brightness(0.7);#}
+{#         -webkit-filter: brightness(0.5);#}
+{#        filter: brightness(0.5);#}
+     }
+     .what {
+         position: relative;
+         color: white;
+         margin-top: 5%;
+         border-width: 5px;
+         border-radius: 15px;
+         border-color: white;
+         background-color: transparent;
+         font-size: 50px;
+     }
+     .what:hover{
+         color: black;
+         background-color: white;
+     }
+     </style>
 
-            </h1>
-        </div>";
 
-        <div id = 'left_black' style='position:absolute;top:0;left:0; width:50%;height:100%;background-color:  #000;'>
-            <h1 style="text-align:center;
-            padding-left: 18%; padding-top: 40%; width:50%; font-size: 4vh; color: white; word-wrap: normal;">
+     <div align="center" class="container-fluid back" style="height: 100%; width: 100%; left:0; position: absolute">
+     <div align="center"  style="margin-top: 20%; color: white; font-size: 40px; background-color: rgba(0,0,0,0.7)">
+          Someone does not agree!
+     </div>
+        <a href="{% url 'view_topics' %}">
+            <button class="btn what" style= >
+                What?!
+            </button>
+        </a>
+     </div>
 
-            </h1>
-        </div>";
+     <div class="container-fluid" style="top: 130%; left: 10%; position: absolute; width: 80%;">
+     <div class="row">
+         <div  class="col-md-4 col-xs-12" ><div align="center" style="">
+             <span class="fa fa-comments"
+                          style="font-size: 150px; color: #9f9f9f; margin: auto">
+                    </span><br><br><p style="width: 70%;font-size: large">
+             This forum is for discussing everything you find interesting, asking questions and helping others to find answers.
+         </div></div>
+         <div class="col-md-4 col-xs-12"><div align="center">
+             <span class="glyphicon glyphicon-sunglasses"
+                          style="font-size: 150px; color: #9f9f9f; ">
+                    </span><br><br><p style="width: 70%;font-size: large">
+            All content is anonymous. But everyone should not break law or be too offensive. Please, respect yourself and other users.
+         </div></div>
+         <div class="col-md-4 col-xs-12"><div align="center">
+             <span class="fa fa-users"
+                          style="font-size: 140px; color: #9f9f9f; margin: auto">
+                    </span><br><br><p style="width: 70%;font-size: large">Our community is growing, so join us to be the part of people with similar interests!
+         </div></div>
 
-        <div id = 'left_column'
-             style="position:absolute;top:0;left:0;width:50%;height:100%;background-color:  #00cc99;">
-            <p style="text-align:center">
-                <a href="{% url 'view_topics'%}">
-                    <span id="left" class="fa fa-comments-o"
-                          style="position:relative; font-size: 17vw;
-                          color: black; margin-top: 30vh; padding-left: 30%; margin-right: 20%" >
-                    </span>
-                </a>
-            </p>
-            <h1 align="center" style="text-align:center; font-size: 5vw; padding-left: 7vh" id="discuss">
-                <p style=" font-family: 'Roboto', sans-serif; font-size: 5vw; font-weight:100 ">Topics</p>
-            </h1>
-        </div>
-
-
-        <div  id = 'right_column'
-              style="position:absolute;top:0;left:50%;width:50%;height:100%;background-color: #993333;">
-            <p style="text-align:center">
-                <a href="{% url 'tags'%}">
-                    <span id="right" class="fa fa-tags"
-                          style="font-size: 17vw; color: #000000; margin-top: 30vh;margin-left: 20%;padding-right: 25%">
-                    </span>
-                </a>
-            </p>
-
-            <h1 style="text-align:center;  font-size: 5vw; padding-right: 3vw" id="ask">
-                <p style=" font-family: 'Roboto', sans-serif; font-size: 5vw; font-weight:100 ">Tags</p>
-            </h1>
-        </div>
-{#        <div style="height: 600px; position: absolute; top: 100%">#}
-{#            HOOOOOOOOOOOME#}
-{#        </div>#}
-        <script src="/static/main_page_shifting.js"></script>
+     </div>
+     <br><br><br><br><hr>
+         <h1 align="center">So, <a href="{% url 'view_topics' %}">WHAT</a> are they talking about?</h1>
+         <hr>
+     </div>
  {% endblock section %}

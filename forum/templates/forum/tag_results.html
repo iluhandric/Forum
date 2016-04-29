@@ -1,14 +1,11 @@
  {% extends 'forum/discussions.html' %}
 <link rel="stylesheet" href="css/style.css">
  {% block content %}
-     <ol class="breadcrumb" style="margin-top:70px; font-size: medium">
+<div class="container-fluid" style="background-color: #aaa; min-height: 100%; position: absolute; left: 0;;width: 100%">
+    <div class="container" style="width: 60%; min-width: 300px; background-color: #fff">
+    <div align="center" class="breadcrumb" style="margin-top: 70px;font-size: medium;">
         <li class="active">Threads with tag "{{ cur_tag.title }}"</li>
-     </ol>
-
-     <div class="container-fluid" style="z-index: 190; left: 0; position: absolute; width: 100%;
-            background: url({{ MEDIA_URL }}{{ cur_topic.logo.url }});min-height: 100%; height: 100% ">
-
-       <div class="container" style="background-color: #ffffff; min-height: 100% ; height: 100%" >
+     </div>
            <ul class="list-group" style="background-color: #ffffff; height: 98%">
 
                {% if threads %}
@@ -40,8 +37,6 @@
            </ul>
        {% endif %}
 </div>
-
-    </div>
 
 
 {% endblock content%}
