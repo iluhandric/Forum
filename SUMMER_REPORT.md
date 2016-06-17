@@ -9,7 +9,7 @@
 
 Итоговый результат
 --------------
-Реализован полноценный форум (имиджборд).  
+Реализован полноценный форум, удовлетворяющий поставленным требованиям.  
 С результатом можно ознакомиться, перейдя по ссылке ниже:  
 
 [Ссылка] []
@@ -56,10 +56,38 @@ _Цитата из wiki.cs.hse.ru:_
 * Blocked - содержит IP заблокированных пользователей (при отправлении каждого запроса проверяется, содержится ли ip-адрес клиента в данной таблице);
 * UserIp - содержит ip и время последнего отклика на определенном треде, используя содержимое этой таблицы, вычисляется количество ip-адресов, просматривающих тот или иной тред;
     
-Более подробно схему базы данных и отношения между моделями можно изучить из файла _DBscheme.png_, находящегося в репозитории.
+___
+Рассмотрим реализацию класса модели Thread:
+
+    class Thread(models.Model):
+        title = models.CharField(max_length=60)
+        text = models.TextField(blank=True, max_length=500)
+        parent = models.BigIntegerField(blank=False)
+        comments = models.ManyToManyField(Comment, blank=True)
+        tags = models.CharField(max_length=100, blank=True)
+        parsed_tags = models.ManyToManyField(Tag, blank=True)
+        time_posted = models.DateTimeField(default=timezone.now)
+        image = models.ImageField(upload_to=get_unique_path, blank=True)
+        users = models.ManyToManyField(UserIp, blank=True)
+        author_ip = models.CharField(max_length=100, default='unknown')
+
+Более подробно схему базы данных и отношения между моделями можно узнать из файла _DBscheme.png_, находящегося в репозитории.
     
+### Шаблоны:
 
-
+    base.html	
+    blocked.html	
+    discussions.html
+    home_page.html
+    new_thread.html	
+    search.html	
+    tag_results.html
+    tags.html
+    thread.html
+    threads.html
+    topic_content.html
+    topics.html
+    topics_list.html
 
 ### Сделано:
 
