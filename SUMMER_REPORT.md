@@ -151,7 +151,7 @@ def thread(request, par, pk):
 Пользователю возвращается шаблон для данного треда с формой, и подгружаются все комментарии.
 Таким образом, юзер перешел на запрашиваемую страницу. Заметим, что ее url удовлетворяет регулярному выражению  
 
-`_^topics/(?P<par>[0-9]+)/threads/(?P<pk>[0-9]+)_`, где par - id топика, а pk - id треда.
+`^topics/(?P<par>[0-9]+)/threads/(?P<pk>[0-9]+)`, где par - id топика, а pk - id треда.
 
 
 ### Features
@@ -197,6 +197,36 @@ def is_blocked(request):
         return False
     except Blocked.MultipleObjectsReturned:
         return True
+```
+
+#### Количество просматривающих
+
+Функция, проверяющая наличие пользовотеля по ip в таблице UserIP и истечение таймаута, таким образом считает количество подключенных пользователей:
+```python
+def counter(request):
+    if is_blocked(request):
+        return render(request, get_template('blocked'))
+    thread_pk = request.GET["pk"]
+    cur_ip = get_client_ip(request)
+    cur_thread = Thread.objects.get(pk=thread_pk)
+    is_new = True
+    for user in cur_thread.users.all():
+        if user.ip == cur_ip:
+            user.last_request = timezone.now()
+            user.save()
+            is_new = False
+        else:
+            if (timezone.now() - user.last_request).total_seconds() > 10:
+                user.delete()
+    if is_new:
+        new_user = UserIp(ip=cur_ip, last_request=timezone.now())
+        new_user.save()
+        cur_thread.users.add(new_user)
+        cur_thread.save()
+    count = len(cur_thread.users.all())
+    data = dict()
+    data["count"] = count
+    return HttpResponse(json.dumps(data), content_type='application/json')
 ```
 Создано около 10 HTML - страниц, отвечающих за представление моделей и взаимодействие с ними.
 Стоит упомянуть, что готовые элементы "резайзабельны" и динамически адаптируются к размеру 
