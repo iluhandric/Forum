@@ -181,6 +181,23 @@ Django предоставляет администрирование для со
 Теперь, как было сказано ранее, 
 > Blocked - содержит IP заблокированных пользователей (при отправлении каждого запроса проверяется, содержится ли ip-адрес клиента в данной таблице)
 
+За это отвечают следующие строчки при обработке запроса:
+```python
+if is_blocked(request):
+       return render(request, get_template('blocked'))
+```
+где 
+```python
+def is_blocked(request):
+    user_ip = get_client_ip(request)
+    try:
+        response = Blocked.objects.get(address=user_ip)
+        return True
+    except Blocked.DoesNotExist:
+        return False
+    except Blocked.MultipleObjectsReturned:
+        return True
+```
 Создано около 10 HTML - страниц, отвечающих за представление моделей и взаимодействие с ними.
 Стоит упомянуть, что готовые элементы "резайзабельны" и динамически адаптируются к размеру 
 окна / экрана. 
