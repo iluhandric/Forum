@@ -228,6 +228,19 @@ def counter(request):
     data["count"] = count
     return HttpResponse(json.dumps(data), content_type='application/json')
 ```
+
+Для ее вызова используется функция на js
+
+```javascript
+$.fn.updateCounter = function (){
+                    $.getJSON("/api/counter.json?pk=" + pk).done(function(json){
+                        $("#counter").html("People viewing: " + json["count"])
+                    });
+                };
+```
+
+#### Отправка комментария
+
 Создано около 10 HTML - страниц, отвечающих за представление моделей и взаимодействие с ними.
 Стоит упомянуть, что готовые элементы "резайзабельны" и динамически адаптируются к размеру 
 окна / экрана. 
