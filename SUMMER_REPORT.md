@@ -75,13 +75,12 @@ ___
     
 ### Шаблоны:
 
-    base.html	
-    blocked.html	
-    discussions.html
-    home_page.html
-    new_thread.html	
-    search.html	
-    tag_results.html
+    base.html - оболочка для остальных страниц, содержащая navbar и подключаемая с помощью _expand_	
+    blocked.html - страница, гласящая о том, что ip клиента заблокирован	
+    home_page.html - landing page, домашняя страница, представляющая основную информацию о продукте
+    new_thread.html - страница с формой для создания нового треда	
+    search.html	- результаты поиска по запросу
+    tag_results.html - 
     tags.html
     thread.html
     threads.html
