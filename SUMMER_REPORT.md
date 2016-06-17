@@ -125,18 +125,21 @@ ___
 
 Данная ссылка задается как:
 
+    ```python
     href="{% url 'thread'  par=cur_topic.pk pk=thread.pk%}"
 
 Она удовлетворяет следующему паттерну:
 
+    ```python
     url(r'^topics/(?P<par>[0-9]+)/threads/(?P<pk>[0-9]+)$', views.thread, name='thread')
     
 Соответсвенно, далее вызывается функция thread(par, pk):
 
+    ```python
     def thread(request, par, pk):
-    cur_thread = get_object_or_404(Thread, pk=pk)
-    comments = cur_thread.comments.all().order_by('-time_posted')
-    cp = get_object_or_404(Topic, pk=cur_thread.parent)
+        cur_thread = get_object_or_404(Thread, pk=pk)
+        comments = cur_thread.comments.all().order_by('-time_posted')
+        cp = get_object_or_404(Topic, pk=cur_thread.parent)
 
     form = CommentForm()
 
