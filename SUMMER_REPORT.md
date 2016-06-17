@@ -233,98 +233,84 @@ def counter(request):
 
 ```javascript
 $.fn.updateCounter = function (){
-                    $.getJSON("/api/counter.json?pk=" + pk).done(function(json){
-                        $("#counter").html("People viewing: " + json["count"])
-                    });
-                };
+    $.getJSON("/api/counter.json?pk=" + pk).done(function(json){
+        $("#counter").html("People viewing: " + json["count"])
+    });
+};
 ```
 
 #### Отправка комментария
 
-Создано около 10 HTML - страниц, отвечающих за представление моделей и взаимодействие с ними.
-Стоит упомянуть, что готовые элементы "резайзабельны" и динамически адаптируются к размеру 
-окна / экрана. 
-Среди таких представляемых элементов:
-
-* Topic 
-* Thread
-* Comment
-
-
-* Post (для "подпроекта" - симулятора блога)
-
-Готовность основных полей этих структур подразумевает по собой весь путь от дазы данных до экрана.
-То есть, 
-для них были реализованы соответствующие модели-классы, описывающие параметры их представления в 
-дэйтатэйблах, взаимодействие друг с другом, собственные параметры. 
-В слеующем фрагменте - часть кода модели для Topic:
-
-    title = models.CharField(max_length=100)
-    logo = models.ImageField(upload_to='')
-    threads = models.ManyToManyField(Thread, blank=True)
-
-Далее, с помощью URL - представлений в Django были созданы views - функции, определяющие визуальное отображение 
-объектов и переход между страницами.
-Приведем в пример пару регулярных выражений из urls.py и соответствующих им views:
-
-URLS.PY
-
-    url(r'^forum/post/(?P<pk>[0-9]+)/edit/$', views.post_edit, name='post_edit'),
-    url(r'^topic/(?P<pk>[0-9]+)/$', views.topic, name='topic'),
-    url(r'^thread/(?P<pk>[0-9]+)/$', views.thread, name='thread')]
-    
-VIEWS.PY:
-    
-    def topic(request, pk):
-    cur_topic = get_object_or_404(Topic, pk=pk)
-    threads = cur_topic.threads.all
-    form = ThreadForm(request.POST)
+Оправка комментария осуществляется через апи вью, вызываемым ajax-запросом:
+```javascript
+$('#post_comment').submit(function(e){
+    $('#image').src = "";
+    var info  = new FormData($(this)[0]);
+    $.ajax({
+        url: "/api/post_comment.json?pk=" + pk,
+        data: info,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        dataType:'json',
+        success: function (data) {
+             if (data) {
+                 $.fn.reloadComments();
+             } else {
+                 alert('You cannot send empty comment or comment with not image files!');
+             }
+        },
+    });
+    e.preventDefault();
+    $(this).closest('form').find("input[type=text], textarea").val("");
+    $('#file').trigger("change");
+    $.fn.reloadComments();
+    $('#image').src = "";
+});
+```
+Где вызываемое вью:
+```python
+@api_view(['GET', 'POST', 'FILES'])
+def new_comment(request):
+    form = CommentForm(request.POST, request.FILES)
     if form.is_valid():
-        thread = form.save(commit=False)
-        try:
-            identical = Thread.objects.get(topic=pk, title=thread.title)
-        except Thread.DoesNotExist:
-            thread.parent = pk
-            thread.save()
-            thread.parent = pk
-            cur_topic.threads.add(thread)
-            return redirect('forum.views.topic', pk=pk)
-    form = ThreadForm()
-    return render(request, 'forum/topic.html', {'cur_topic': cur_topic, 'threads':threads, 'form': form})
-    
-После сказанного, все это было подключено к templates для контекстного отображения на страницах.
+        comment = Comment(text=request.POST.get('text', False).replace('<', '&lt'), 
+                            image=request.FILES.get('image'))
+        comment.parent = request.GET["pk"]
+        comment.time_posted = timezone.now()
+        comment.author_ip = get_client_ip(request)
+        comment.save()
+        thread_pk = request.GET["pk"]
+        cur_thread = Thread.objects.get(pk=thread_pk)
+        cur_topic = Topic.objects.get(pk=cur_thread.parent)
+        cur_topic.comments.add(comment)
+        cur_thread.comments.add(comment)
+    return Response(form.is_valid())
+```
 
-Редактирование отдельных объектов, соответсвующих указанным структураам и представляющим модели, 
-возможно через стандартное Django-администрирование. Но, что, важнее того, добавление новых тредов и комментариев можно осуществлять
-мгновенно, используя django forms на соответствующих страницах.
+#### Подгрузка комментариев
 
-Добавление комментария в THREAD.HTML:
+При нажатиии на кнопку перезагрузки(а также при отправке комментария, загрузке страницы и тд) вызывается функция, возвращающая комментарии через json
+```python
+@api_view(['GET', 'POST'])
+def get_comments(request):
+    if is_blocked(request):
+        return render(request, get_template('blocked'))
+    if not is_blocked(request):
+        thread_pk = request.GET["pk"]
+        cur_thread = Thread.objects.get(pk=thread_pk)
+        comments = cur_thread.comments.all().order_by('-time_posted')
+        data = []
+        for com in comments:
+            new_obj = model_to_dict(com)
+            for field in new_obj:
+                if field == 'time_posted':
+                    new_obj[field] = new_obj[field].strftime("%Y/%m/%d %H:%M:%S")
+                if field and field != 'time_posted':
+                    new_obj[field] = str(new_obj[field])
 
-    <div class="form-group" style="margin: 10px">
-        <form method="POST" type="text" class="form" style="width:60%; ">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-default" style="background-color:#00cc99; position: relative;">
-                Add comment
-            </button>
-        </form>
-    </div>
-
- 
-### Что дальше?
-
-Далее необходимо сделать следующее.
-
-* Привести в порядок код, разделить его по директориями и файлам, соблюсти кодстайл
-* ОЧЕНЬ тщательно подчистить репозиторий
-* Дать соответствующие имена директориям
-* Оптимизировать рпботу некоторых функций
-* Подогнать вид и структуру проекта под нормы
-* Добавить регистрацию и аутентификацию пользователей
-* Добавить страницы пользователей, блокировки и разрешения
-* Усложнить структуры объектов, добавив рейтинги и т.п.
-* Добавить rest-api
-
-
-Подводя итоги, хотелось бы отметить, что, дело на самом деле продвигается, хоть я и работаю в своем ритме, не всегда успевая
-за контролем. В ближайшем времени проект заметно преобразится.
+            data.append(new_obj)
+    else:
+        data = [{'text': 'YOU ARE BLOCKED AND NOT ALLOWED TO VIEW OR POST ANYTHING', 'time_posted': ''}]
+    return Response(json.dumps(data), content_type='application/json')
+```
