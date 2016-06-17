@@ -125,13 +125,15 @@ ___
 
 Данная ссылка задается как:
 
-    ```python
-    href="{% url 'thread'  par=cur_topic.pk pk=thread.pk%}"
+```python
+href="{% url 'thread'  par=cur_topic.pk pk=thread.pk%}"
+```
 
 Она удовлетворяет следующему паттерну:
 
-    ```python
-    url(r'^topics/(?P<par>[0-9]+)/threads/(?P<pk>[0-9]+)$', views.thread, name='thread')
+```python
+url(r'^topics/(?P<par>[0-9]+)/threads/(?P<pk>[0-9]+)$', views.thread, name='thread')
+```
     
 Соответсвенно, далее вызывается функция thread(par, pk):
 ```python
